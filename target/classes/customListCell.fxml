@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <VBox>
+      <HBox alignment="CENTER" prefWidth="1000.0">
+         <Label fx:id="labelDate" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="13223" />
+         <Label fx:id="labelTitle" prefWidth="10000.0" text="title" />
+         <Label fx:id="labelLanguage" minWidth="100.0" prefWidth="100.0" text="language" />
+         <AnchorPane nodeOrientation="RIGHT_TO_LEFT">
+            <SVGPath fx:id="svgFavStar" content="M20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7z" fill="#f8d64e" />
+            <SVGPath content="M20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7zm-10 6.9l-3.76 2.27 1-4.28L3.5 8.5h4.61L10 4.6l1.9 3.9h4.6l-3.73 3.4 1 4.28z" fill="#aeaeae" />
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </AnchorPane>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+         </padding>
+      </HBox>
+      <Label fx:id="labelDescription" text="description">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+         </padding></Label>
+   </VBox>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>
