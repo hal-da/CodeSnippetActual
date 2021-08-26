@@ -37,7 +37,7 @@ public class DataBaseSetup {
             "FOREIGN KEY (snippet_id) REFERENCES %s(snippet_id)" +
             ")", Consts.TABLE_NAME_LINKS, Consts.TABLE_NAME_SNIPPETS);*/
 
-    public static void startDatabase() throws SQLException {
+    public static void createDatabase() throws SQLException {
         System.out.println("db setup started");
         System.out.println("getting connection");
         Connection connection = null;

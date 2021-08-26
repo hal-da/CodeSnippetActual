@@ -9,7 +9,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
 Connection connection;
@@ -20,7 +19,7 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
     }
 
     @Override
-    public int insert(CodeSnippet codeSnippet) throws SQLException {
+    public void insert(CodeSnippet codeSnippet) throws SQLException {
         String prepStatement = "INSERT INTO snippets(title,description,favourite,snippet,language_id,url,last_change,times_seen) VALUES (?,?,?,?,?,?,?,?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(prepStatement, Statement.RETURN_GENERATED_KEYS);
@@ -40,7 +39,7 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
         preparedStatement.executeUpdate();
         ResultSet resultSet = preparedStatement.getGeneratedKeys();
         resultSet.next();
-        return resultSet.getInt(1);
+        resultSet.getInt(1);
     }
 
     @Override
@@ -56,22 +55,22 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
         return codeSnippets;
     }
 
-    @Override
+/*    @Override
     public Optional<CodeSnippet> read(int codeSnippetId) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM snippets WHERE snippet_id = ?");
+        //methode ist ungenutzt
+*//*        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM snippets WHERE snippet_id = ?");
         preparedStatement.setInt(1,codeSnippetId);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         CodeSnippet codeSnippet = getCodeSnippetFromResultSet(resultSet);
-
         System.out.println(codeSnippet);
-
-        return Optional.of(codeSnippet);
-    }
+        return Optional.of(codeSnippet);*//*
+        return null;
+    }*/
 
 
     @Override
-    public CodeSnippet update(CodeSnippet codeSnippet) throws SQLException {
+    public void update(CodeSnippet codeSnippet) throws SQLException {
         PreparedStatement prepStatement = connection.prepareStatement("UPDATE snippets SET title=?,description=?,favourite=?,snippet=?,language_id=?,url=?,last_change=?,times_seen=? WHERE snippet_id = ?");
 
         prepStatement.setString(1,codeSnippet.getTitle());
@@ -87,7 +86,6 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
 
         prepStatement.executeUpdate();
         System.out.println("update executed");
-        return null;
     }
 
     @Override

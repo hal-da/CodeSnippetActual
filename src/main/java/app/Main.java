@@ -13,7 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        DataBaseSetup.startDatabase();
+        DataBaseSetup.createDatabase();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/start.fxml")));
         primaryStage.setTitle("CodeSnippet SingleUser");
         Scene scene = new Scene(root);
