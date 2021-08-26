@@ -170,7 +170,7 @@ public class ControllerSnippetDetails {
     @FXML
     private void handleBtnSave() throws SQLException {
         System.out.println("click save btn" + codeSnippetId);
-        getCodeSnippetFromView();
+        createCodeSnippetFromFormData();
         if (codeSnippetId == 0) {
             codeSnippetRepositoryJDBC.insert(codeSnippet);
         } else {
@@ -179,7 +179,7 @@ public class ControllerSnippetDetails {
         closeStage();
     }
 
-    private void getCodeSnippetFromView() {
+    private void createCodeSnippetFromFormData() {
         if(codeSnippet == null){
             codeSnippet = new CodeSnippet();
         }

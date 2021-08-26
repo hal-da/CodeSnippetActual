@@ -162,10 +162,7 @@ public class ControllerStart {
         }
         fillListView(codeSnippetObservableList);
         addListenerToLanguageChoiceBox();
-
     }
-
-
 
     private void fillListView(ObservableList<CodeSnippet> codeSnippetObservableList){
         listViewSnippets.setItems(codeSnippetObservableList);

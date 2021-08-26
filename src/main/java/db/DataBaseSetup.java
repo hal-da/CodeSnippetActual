@@ -2,7 +2,7 @@ package db;
 
 import models.CodeSnippet;
 import models.Language;
-import util.Consts;
+import util.Constants;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
@@ -14,7 +14,7 @@ public class DataBaseSetup {
     private static final String CREATE_TABLE_LANGUAGE = String.format("CREATE TABLE %s (" +
             "language_id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
             "language_name VARCHAR(64)" +
-            ")", Consts.TABLE_NAME_LANGUAGES);
+            ")", Constants.TABLE_NAME_LANGUAGES);
 
     private static final String CREATE_TABLE_SNIPPETS = "CREATE TABLE snippets (" +
             "snippet_id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
@@ -44,7 +44,7 @@ public class DataBaseSetup {
         Statement statement = null;
 
         try {
-            connection = DriverManager.getConnection(Consts.CONNECTION_STRING);
+            connection = DriverManager.getConnection(Constants.CONNECTION_STRING);
             System.out.println("connected");
             statement = connection.createStatement();
         } catch (SQLException sqlException) {

@@ -1,7 +1,7 @@
 package repository;
 
 import models.Language;
-import util.Consts;
+import util.Constants;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,12 +10,11 @@ import java.util.Optional;
 
 public class LanguageRepositoryJDBC implements LanguageRepository{
 
-    private static final String INSERT_LANGUAGE = String.format("INSERT INTO %s (language_name) VALUES (?)", Consts.TABLE_NAME_LANGUAGES);
+    private static final String INSERT_LANGUAGE = String.format("INSERT INTO %s (language_name) VALUES (?)", Constants.TABLE_NAME_LANGUAGES);
 
     Connection connection;
-
     public LanguageRepositoryJDBC() throws SQLException {
-        connection = DriverManager.getConnection(Consts.CONNECTION_STRING);
+        connection = DriverManager.getConnection(Constants.CONNECTION_STRING);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
     public List<Language> readAll() throws SQLException {
         List<Language> languages = new ArrayList<>();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM %s",Consts.TABLE_NAME_LANGUAGES));
+        ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM %s", Constants.TABLE_NAME_LANGUAGES));
 
         while (resultSet.next()){
             int languageId = resultSet.getInt(1);
@@ -47,7 +46,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
     @Override
     public Optional<Language> read(int id) throws SQLException {
         Language language = null;
-        PreparedStatement preparedStatement = connection.prepareStatement(String.format("SELECT * FROM %s WHERE language_id = ?",Consts.TABLE_NAME_LANGUAGES));
+        PreparedStatement preparedStatement = connection.prepareStatement(String.format("SELECT * FROM %s WHERE language_id = ?", Constants.TABLE_NAME_LANGUAGES));
         preparedStatement.setInt(1,id);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
@@ -60,7 +59,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
 
     @Override
     public Language update(Language language) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE %s SET language_name=? WHERE language_id=? ",Consts.TABLE_NAME_LANGUAGES));
+        PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE %s SET language_name=? WHERE language_id=? ", Constants.TABLE_NAME_LANGUAGES));
         preparedStatement.setString(1,language.getName());
         preparedStatement.setInt(2,language.getId());
         preparedStatement.executeUpdate();
@@ -70,7 +69,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
 
     @Override
     public void delete(Language language) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(String.format("DELETE FROM %s WHERE LANGUAGE_ID = ?",Consts.TABLE_NAME_LANGUAGES));
+        PreparedStatement preparedStatement = connection.prepareStatement(String.format("DELETE FROM %s WHERE LANGUAGE_ID = ?", Constants.TABLE_NAME_LANGUAGES));
         preparedStatement.setInt(1,language.getId());
         int rowsChanged = preparedStatement.executeUpdate();
         System.out.println(rowsChanged + " row deleted, name: " + language.getName());

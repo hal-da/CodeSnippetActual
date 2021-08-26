@@ -2,7 +2,7 @@ package repository;
 
 import models.CodeSnippet;
 import models.Language;
-import util.Consts;
+import util.Constants;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,16 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
-Connection connection;
-LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
+    Connection connection;
+    LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
+    String snippetsDatabaseName = Constants.TABLE_NAME_SNIPPETS;
+    String languagesDatabaseName = Constants.TABLE_NAME_LANGUAGES;
 
     public CodeSnippetRepositoryJDBC() throws SQLException {
-        connection = DriverManager.getConnection(Consts.CONNECTION_STRING);
+        connection = DriverManager.getConnection(Constants.CONNECTION_STRING);
     }
 
     @Override
     public void insert(CodeSnippet codeSnippet) throws SQLException {
-        String prepStatement = "INSERT INTO snippets(title,description,favourite,snippet,language_id,url,last_change,times_seen) VALUES (?,?,?,?,?,?,?,?)";
+        String prepStatement = "INSERT INTO "+ snippetsDatabaseName + "(title,description,favourite,snippet,language_id,url,last_change,times_seen) VALUES (?,?,?,?,?,?,?,?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(prepStatement, Statement.RETURN_GENERATED_KEYS);
 
@@ -47,7 +49,7 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
 
         List<CodeSnippet> codeSnippets = new ArrayList<>();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM snippets");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + snippetsDatabaseName);
 
         while (resultSet.next()){
             codeSnippets.add(getCodeSnippetFromResultSet(resultSet));
@@ -71,7 +73,7 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
 
     @Override
     public void update(CodeSnippet codeSnippet) throws SQLException {
-        PreparedStatement prepStatement = connection.prepareStatement("UPDATE snippets SET title=?,description=?,favourite=?,snippet=?,language_id=?,url=?,last_change=?,times_seen=? WHERE snippet_id = ?");
+        PreparedStatement prepStatement = connection.prepareStatement("UPDATE " + snippetsDatabaseName + " SET title=?,description=?,favourite=?,snippet=?,language_id=?,url=?,last_change=?,times_seen=? WHERE snippet_id = ?");
 
         prepStatement.setString(1,codeSnippet.getTitle());
         prepStatement.setString(2,codeSnippet.getDescription());
@@ -90,14 +92,14 @@ LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
 
     @Override
     public void delete(CodeSnippet codeSnippet) throws SQLException {
-        String deleteOne = "DELETE FROM snippets WHERE snippet_id = ?";
+        String deleteOne = "DELETE FROM " + snippetsDatabaseName + " WHERE snippet_id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(deleteOne);
         preparedStatement.setInt(1,codeSnippet.getId());
         preparedStatement.executeUpdate();
     }
 
     private int getFKLang(CodeSnippet codeSnippet) throws SQLException {
-        String getLanguageIdQuery = "SELECT language_id FROM languages WHERE language_name = ?";
+        String getLanguageIdQuery = "SELECT language_id FROM " + languagesDatabaseName + " WHERE language_name = ?";
         PreparedStatement getLangIdPrepStatement = connection.prepareStatement(getLanguageIdQuery);
         getLangIdPrepStatement.setString(1,codeSnippet.getLanguage().getName());
         ResultSet r = getLangIdPrepStatement.executeQuery();
