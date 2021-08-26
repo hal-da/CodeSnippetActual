@@ -100,14 +100,14 @@ public class ControllerStart {
     private void openSnippetDetail(CodeSnippet codeSnippet){
         if(codeSnippet == null) return;
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/snippetDetail.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/fxml/snippetDetail.fxml"));
         try {
             Parent root = fxmlLoader.load();
             ControllerSnippetDetails controllerSnippetDetails = fxmlLoader.getController();
             controllerSnippetDetails.populateViewWithExistingCodeSnippet(codeSnippet);
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/java-keywords.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/java-keywords.css")).toExternalForm());
             Stage stage = new Stage();
             stage.setTitle("Create new CodeSnippet");
             stage.setScene(scene);

@@ -2,14 +2,11 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Modality;
@@ -74,7 +71,7 @@ public class ControllerSnippetDetails {
     @FXML
     void handlerBtnEditLanguage() {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/editLanguage.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/fxml/editLanguage.fxml"));
 
         try {
             Parent parent = fxmlLoader.load();

@@ -14,7 +14,7 @@ public class CustomListCell extends ListCell<CodeSnippet> {
 
     public CustomListCell() {
         if (fxmlLoader == null) {
-            fxmlLoader = new FXMLLoader(getClass().getResource("/customListCell.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/customListCell.fxml"));
             fxmlLoader.setController(this);
             try {
                 fxmlLoader.load();

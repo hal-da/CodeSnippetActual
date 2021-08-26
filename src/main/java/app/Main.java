@@ -14,10 +14,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         DataBaseSetup.startDatabase();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/start.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/start.fxml")));
         primaryStage.setTitle("CodeSnippet SingleUser");
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/listView.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/listView.css")).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
 
