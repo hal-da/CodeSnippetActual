@@ -78,9 +78,9 @@ public class ControllerEditLanguage {
         }
 
 
-        System.out.println(choiceBoxLanguages.getSelectionModel().getSelectedIndex());
+/*        System.out.println(choiceBoxLanguages.getSelectionModel().getSelectedIndex());
         System.out.println(textFieldLanguage.getText());
-        System.out.println(choiceBoxLanguages.getSelectionModel().getSelectedItem().getId());
+        System.out.println(choiceBoxLanguages.getSelectionModel().getSelectedItem().getId());*/
 
         closeStage();
     }

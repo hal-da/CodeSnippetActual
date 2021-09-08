@@ -70,22 +70,15 @@ public class ControllerSnippetDetails {
 
     @FXML
     void handlerBtnEditLanguage() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/fxml/editLanguage.fxml"));
+
+        EditLanguageWindow editLanguageWindow = new EditLanguageWindow();
+        editLanguageWindow.showLanguageEditWindow();
 
         try {
-            Parent parent = fxmlLoader.load();
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setTitle("Edit Languages");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.showAndWait();
             fillCHeckBox();
-        }catch (IOException | SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -212,14 +205,6 @@ public class ControllerSnippetDetails {
 
     private void disableButtonsAtStart(Button button){
 
-        //Callable<Boolean> callableTextField = new CallableTextField(textCodeArea);
-
-/*
-        textCodeArea.getCodeArea().textProperty().addListener((ov, oldText, newText) -> {
-            System.out.println(newText);
-        });
-        textCodeArea.getCodeArea().textProperty().
-*/
         button.disableProperty().bind(
                 textFieldDescription.textProperty().isEmpty().or(
                         textFieldTitle.textProperty().isEmpty().or(
@@ -229,12 +214,4 @@ public class ControllerSnippetDetails {
                 )
         );
     }
-
-/*    public Callable<TextCodeArea> CallableTextField(TextCodeArea textCodeArea) implements Callable<Boolean> {
-
-        @Override
-        public Boolean call() throws Exception {
-            return (textCodeArea.getCodeArea().);
-        }
-    }*/
 }

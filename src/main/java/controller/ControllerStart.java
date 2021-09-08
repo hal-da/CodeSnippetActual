@@ -98,48 +98,16 @@ public class ControllerStart {
     }
 
     private void openSnippetDetail(CodeSnippet codeSnippet){
-        if(codeSnippet == null) return;
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/fxml/snippetDetail.fxml"));
-        try {
-            Parent root = fxmlLoader.load();
-            ControllerSnippetDetails controllerSnippetDetails = fxmlLoader.getController();
-            controllerSnippetDetails.populateViewWithExistingCodeSnippet(codeSnippet);
 
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/java-keywords.css")).toExternalForm());
-            Stage stage = new Stage();
-            stage.setTitle("Create new CodeSnippet");
-            stage.setScene(scene);
-            stage.showAndWait();
-//TODO: alles das in eine windowklasse - phptlibrry übungsbeispiele
-            //refresh list
+        CodeSnippetDetailWindow codeSnippetDetailWindow = new CodeSnippetDetailWindow();
+        codeSnippetDetailWindow.showSnippetInStage(codeSnippet);
+
+        try {
             initialize();
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-/*    //TODO: DELETE- only for testing!
-    private CodeSnippet getCodeSnippetFromDB() throws SQLException {
-        Optional<CodeSnippet> optionalCodeSnippet = codeSnippets.get(0);
-        CodeSnippet newCodeSnippet = new CodeSnippet();
-        optionalCodeSnippet.ifPresent(c -> {
-            newCodeSnippet.setId(1);
-            newCodeSnippet.setTitle(c.getTitle());
-            newCodeSnippet.setDescription(c.getDescription());
-            newCodeSnippet.setSnippet(c.getSnippet());
-            newCodeSnippet.setFavourite(c.isFavourite());
-            newCodeSnippet.setUrl(c.getUrl());
-            newCodeSnippet.setLastChange(c.getLastChange());
-            newCodeSnippet.setTimesSeen(c.getTimesSeen());
-            newCodeSnippet.setLanguage(c.getLanguage());
-        });
-        System.out.println("---------------------");
-        System.out.println(newCodeSnippet);
-        System.out.println("---------------------");
-        return newCodeSnippet;
-    }*/
 
     @FXML
     void initialize() throws SQLException {
@@ -153,7 +121,10 @@ public class ControllerStart {
         checkBoxSearchDescription.setSelected(true);
         checkBoxSearchCode.setSelected(true);
         checkBoxSearchTitle.setSelected(true);
+
         listViewSnippets.setCellFactory(cell -> new CustomListCell());
+        listViewSnippets.setOnMouseClicked(click -> openSnippetDetail(listViewSnippets.getSelectionModel().getSelectedItem()));
+
         fillChoiceBox();
         try {
             codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
@@ -166,8 +137,6 @@ public class ControllerStart {
 
     private void fillListView(ObservableList<CodeSnippet> codeSnippetObservableList){
         listViewSnippets.setItems(codeSnippetObservableList);
-
-        listViewSnippets.setOnMouseClicked(click -> openSnippetDetail(listViewSnippets.getSelectionModel().getSelectedItem()));
     }
 
     private void fillChoiceBox() throws SQLException {
@@ -186,7 +155,6 @@ public class ControllerStart {
     private void addListenerToLanguageChoiceBox(){
         choiceBoxLanguages.getSelectionModel().selectedItemProperty().addListener( (selection, oldValue, newValue) ->{
             if(oldValue != null && newValue != null){
-                //filterSnippetList(newValue);
                 handleInputTextChangedSearch();
             }
         });
