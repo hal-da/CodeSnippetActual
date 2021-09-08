@@ -206,7 +206,6 @@ public class ControllerSnippetDetails {
         codeSnippet.setFavourite(!codeSnippet.isFavourite());
         System.out.println(codeSnippet.isFavourite());
         svgIsFavorite.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
-
     }
 
 

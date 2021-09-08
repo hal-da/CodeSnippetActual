@@ -112,7 +112,7 @@ public class ControllerStart {
             stage.setTitle("Create new CodeSnippet");
             stage.setScene(scene);
             stage.showAndWait();
-
+//TODO: alles das in eine windowklasse - phptlibrry übungsbeispiele
             //refresh list
             initialize();
         } catch (IOException | SQLException e) {
@@ -153,7 +153,7 @@ public class ControllerStart {
         checkBoxSearchDescription.setSelected(true);
         checkBoxSearchCode.setSelected(true);
         checkBoxSearchTitle.setSelected(true);
-
+        listViewSnippets.setCellFactory(cell -> new CustomListCell());
         fillChoiceBox();
         try {
             codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
@@ -166,7 +166,7 @@ public class ControllerStart {
 
     private void fillListView(ObservableList<CodeSnippet> codeSnippetObservableList){
         listViewSnippets.setItems(codeSnippetObservableList);
-        listViewSnippets.setCellFactory(cell -> new CustomListCell());
+
         listViewSnippets.setOnMouseClicked(click -> openSnippetDetail(listViewSnippets.getSelectionModel().getSelectedItem()));
     }
 

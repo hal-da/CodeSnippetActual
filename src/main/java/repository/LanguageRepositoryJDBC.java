@@ -73,6 +73,5 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         preparedStatement.setInt(1,language.getId());
         int rowsChanged = preparedStatement.executeUpdate();
         System.out.println(rowsChanged + " row deleted, name: " + language.getName());
-
     }
 }
