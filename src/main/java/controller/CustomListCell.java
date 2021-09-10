@@ -9,6 +9,7 @@ import javafx.scene.shape.SVGPath;
 import models.CodeSnippet;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 public class CustomListCell extends ListCell<CodeSnippet> {
 
@@ -38,6 +39,8 @@ public class CustomListCell extends ListCell<CodeSnippet> {
     private Label labelDescription;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Label labelCreatedAt;
 
     @Override
     protected void updateItem(CodeSnippet codeSnippet, boolean empty){
@@ -48,11 +51,12 @@ public class CustomListCell extends ListCell<CodeSnippet> {
             setText(null);
             setGraphic(null);
         } else {
-            labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
+            labelDate.setText("last change: " + codeSnippet.getLastChange().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
             labelTitle.setText(codeSnippet.getTitle());
             labelDescription.setText(codeSnippet.getDescription());
             labelLanguage.setText(codeSnippet.getLanguage().getName());
             svgFavStar.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
+            labelCreatedAt.setText("created at: " + codeSnippet.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
             setGraphic(anchorPane);
         }
     }

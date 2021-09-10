@@ -7,6 +7,7 @@ import util.Constants;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
 
     @Override
     public void insert(CodeSnippet codeSnippet) throws SQLException {
-        String prepStatement = "INSERT INTO "+ snippetsDatabaseName + "(title,description,favourite,snippet,language_id,url,last_change,times_seen) VALUES (?,?,?,?,?,?,?,?)";
+        String prepStatement = "INSERT INTO "+ snippetsDatabaseName + "(title,description,favourite,snippet,language_id,url,last_change,times_seen,created_at) VALUES (?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(prepStatement, Statement.RETURN_GENERATED_KEYS);
 
@@ -37,6 +38,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
         preparedStatement.setString(6, String.valueOf(codeSnippet.getUrl()));
         preparedStatement.setDate(7, Date.valueOf(codeSnippet.getLastChange()));
         preparedStatement.setInt(8,codeSnippet.getTimesSeen());
+        preparedStatement.setDate(9, Date.valueOf(codeSnippet.getCreatedAt()));
 
         preparedStatement.executeUpdate();
         ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -73,7 +75,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
 
     @Override
     public void update(CodeSnippet codeSnippet) throws SQLException {
-        PreparedStatement prepStatement = connection.prepareStatement("UPDATE " + snippetsDatabaseName + " SET title=?,description=?,favourite=?,snippet=?,language_id=?,url=?,last_change=?,times_seen=? WHERE snippet_id = ?");
+        PreparedStatement prepStatement = connection.prepareStatement("UPDATE " + snippetsDatabaseName + " SET title=?,description=?,favourite=?,snippet=?,language_id=?,url=?,last_change=?,times_seen=?, created_at=? WHERE snippet_id = ?");
 
         prepStatement.setString(1,codeSnippet.getTitle());
         prepStatement.setString(2,codeSnippet.getDescription());
@@ -85,6 +87,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
         prepStatement.setInt(8,codeSnippet.getTimesSeen());
 
         prepStatement.setInt(9,codeSnippet.getId());
+        prepStatement.setDate(10,Date.valueOf(codeSnippet.getCreatedAt()));
 
         prepStatement.executeUpdate();
         System.out.println("update executed");
@@ -129,6 +132,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
 
         Date date = resultSet.getDate(8);
         int timesSeen = resultSet.getInt(9);
+        Date createdAt = resultSet.getDate(10);
 
         return new CodeSnippet(
                 snippetId,
@@ -139,7 +143,8 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
                 language,
                 url,
                 date.toLocalDate(),
-                timesSeen
+                timesSeen,
+                createdAt.toLocalDate()
         );
     }
 }

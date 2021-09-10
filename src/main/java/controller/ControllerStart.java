@@ -37,7 +37,7 @@ public class ControllerStart {
     @FXML
     private Button buttonNewSnippet;
 
-    private final String[] sortOptionsArr = new String[] {"Last change", "Language", "Title", "Times seen", "Description"};
+    private final String[] sortOptionsArr = new String[] {"Last change", "Language", "Title", "Times seen", "Description", "created at"};
     private final ObservableList<String> sortOptions = FXCollections.observableArrayList(sortOptionsArr);
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
     private final CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
@@ -58,6 +58,7 @@ public class ControllerStart {
             case "Title" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getTitle));
             case "Times seen" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getTimesSeen).reversed());
             case "Description" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getDescription));
+            case "created at" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange));
             default -> System.out.println("default");
         }
     }

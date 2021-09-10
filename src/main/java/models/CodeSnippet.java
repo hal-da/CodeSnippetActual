@@ -14,8 +14,10 @@ public class CodeSnippet {
     Language language = null;
     URL url = null;
     LocalDate lastChange = LocalDate.now();
+    LocalDate createdAt = LocalDate.now();
     int timesSeen = 0;
 
+    //only fpr unit test
     public CodeSnippet() {
     }
 
@@ -23,7 +25,7 @@ public class CodeSnippet {
 
 
     //new from DB
-    public CodeSnippet(int id, String title, String description, boolean isFavourite, String snippet, Language language, URL url, LocalDate lastChange, int timesSeen) {
+    public CodeSnippet(int id, String title, String description, boolean isFavourite, String snippet, Language language, URL url, LocalDate lastChange, int timesSeen, LocalDate createdAt) {
         this.id = id;
         this.title = title + " " + timesSeen;
         this.description = description;
@@ -33,6 +35,7 @@ public class CodeSnippet {
         this.url = url;
         this.lastChange = lastChange;
         this.timesSeen = timesSeen;
+        this.createdAt = createdAt;
     }
 
     public int getId() {
@@ -106,6 +109,10 @@ public class CodeSnippet {
     public void setTimesSeen(int timesSeen) {
         this.timesSeen = timesSeen;
     }
+
+    public LocalDate getCreatedAt() {return createdAt;}
+
+    public void setCreatedAt(LocalDate createdAt) {this.createdAt = createdAt;}
 
     @Override
     public String toString() {
