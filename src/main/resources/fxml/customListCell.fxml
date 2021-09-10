@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <VBox>
       <HBox alignment="CENTER" prefWidth="1000.0">
-         <Label fx:id="labelDate" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="13223" />
+         <Label fx:id="labelDate" minWidth="150.0" prefWidth="300.0" text="13223" />
          <Label fx:id="labelTitle" prefWidth="10000.0" text="title" />
          <Label fx:id="labelLanguage" minWidth="100.0" prefWidth="100.0" text="language" />
          <AnchorPane nodeOrientation="RIGHT_TO_LEFT">
@@ -26,10 +28,20 @@
             <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
          </padding>
       </HBox>
-      <Label fx:id="labelDescription" text="description">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
-         </padding></Label>
+      <HBox prefWidth="1000.0">
+         <children>
+            <Label fx:id="labelDescription" prefWidth="870.0" text="description">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelCreatedAt" alignment="TOP_RIGHT" text="created at:">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
    </VBox>
    <cursor>
       <Cursor fx:constant="HAND" />

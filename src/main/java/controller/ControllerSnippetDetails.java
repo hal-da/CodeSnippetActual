@@ -15,12 +15,14 @@ import models.CodeSnippet;
 import models.Language;
 import repository.CodeSnippetRepositoryJDBC;
 import repository.LanguageRepositoryJDBC;
+import util.Constants;
 import view.TextCodeArea;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -103,7 +105,8 @@ public class ControllerSnippetDetails {
         assert textFieldDescription != null : "fx:id=\"textFieldDescription\" was not injected: check your FXML file 'snippetDetail.fxml'.";
 
         labelDate.setText(String.valueOf(LocalDate.now()));
-        textCodeArea = new TextCodeArea(anchorPane, "");
+        //textCodeArea = new TextCodeArea(anchorPane, "", Constants.STANDARD_KEY_WORDS);
+        //textCodeArea.setKEYWORDS(codeSnippet.getLanguage().getKeyWords());
 
         disableButtonsAtStart(btnSave);
         disableButtonsAtStart(btnDelete);
@@ -112,6 +115,9 @@ public class ControllerSnippetDetails {
 
     public void populateViewWithExistingCodeSnippet(CodeSnippet c){
         codeSnippet = c;
+        String[] keywords = codeSnippet.getLanguage() == null ?  Constants.STANDARD_KEY_WORDS : codeSnippet.getLanguage().getKeyWords();
+/*        textCodeArea = new TextCodeArea(anchorPane, "", keywords);
+        System.out.println(Arrays.toString(textCodeArea.getKEYWORDS()));*/
         codeSnippetId = codeSnippet.getId();
 
         //raise timesSeen in CodeSnippet & save it
@@ -133,7 +139,12 @@ public class ControllerSnippetDetails {
         textFieldLink.setText(url.isEmpty() || url.equals("null") ? "" : url);
         labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
         textFieldDescription.setText(codeSnippet.getDescription());
-        textCodeArea = new TextCodeArea(anchorPane,codeSnippet.getSnippet());
+        System.out.println(Arrays.toString(keywords));
+        TextCodeArea.KEYWORDS = keywords;
+        TextCodeArea.setKeywordPattern();
+        //TextCodeArea.compilePattern();
+        textCodeArea = new TextCodeArea(anchorPane,codeSnippet.getSnippet(), keywords);
+
         svgIsFavorite.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
         labelTimesSeen.setText(String.valueOf(codeSnippet.getTimesSeen()));
     }

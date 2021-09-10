@@ -5,12 +5,13 @@ import util.Constants;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class LanguageRepositoryJDBC implements LanguageRepository{
 
-    private static final String INSERT_LANGUAGE = String.format("INSERT INTO %s (language_name) VALUES (?)", Constants.TABLE_NAME_LANGUAGES);
+    private static final String INSERT_LANGUAGE = String.format("INSERT INTO %s (language_name, key_words) VALUES (?,?)", Constants.TABLE_NAME_LANGUAGES);
 
     Connection connection;
     public LanguageRepositoryJDBC() throws SQLException {
@@ -18,9 +19,12 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
     }
 
     @Override
-    public int insert(String languageName) throws SQLException {
+    public int insert(Language language) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, languageName);
+        preparedStatement.setString(1, language.getName());
+        String keyWords = language.getKeyWords().length == 0 ? String.join(",",Constants.STANDARD_KEY_WORDS) : String.join(",",language.getKeyWords());
+        System.out.println("last words: " + keyWords);
+        preparedStatement.setString(2,keyWords);
         preparedStatement.executeUpdate();
         ResultSet resultSet = preparedStatement.getGeneratedKeys();
         resultSet.next();
@@ -36,7 +40,10 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         while (resultSet.next()){
             int languageId = resultSet.getInt(1);
             String languageName = resultSet.getString(2);
-            Language language = new Language(languageId,languageName);
+            String[] keyWords = resultSet.getString(3).split(",");
+            Language language = new Language(languageId,languageName, keyWords);
+            System.out.println("lang from table");
+            System.out.println(language);
             languages.add(language);
         }
 
@@ -52,16 +59,21 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         while (resultSet.next()){
             int langId = resultSet.getInt(1);
             String langName = resultSet.getString(2);
-            language = new Language(langId,langName);
+            String[] keyWords = resultSet.getString(3).split(",");
+            System.out.println(Arrays.toString(keyWords) + " keywords from table");
+            language = new Language(langId,langName,keyWords);
         }
         return Optional.ofNullable(language);
     }
 
     @Override
     public Language update(Language language) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE %s SET language_name=? WHERE language_id=? ", Constants.TABLE_NAME_LANGUAGES));
+        PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE %s SET language_name=?, key_words=? WHERE language_id=? ", Constants.TABLE_NAME_LANGUAGES));
         preparedStatement.setString(1,language.getName());
-        preparedStatement.setInt(2,language.getId());
+        String keyWords = language.getKeyWords().length == 0 ?  String.join(",",Constants.STANDARD_KEY_WORDS) : String.join(",",language.getKeyWords());
+        preparedStatement.setString(2, keyWords);
+        preparedStatement.setInt(3,language.getId());
+
         preparedStatement.executeUpdate();
         System.out.println(language);
         return language;

@@ -10,6 +10,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.reactfx.Subscription;
+import util.Constants;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -19,20 +20,9 @@ import java.util.regex.Pattern;
 
 public class TextCodeArea {
 
-    private static final String[] KEYWORDS = new String[] {
-            "abstract", "assert", "boolean", "break", "byte", "requires","Override",
-            "case", "catch", "char", "class", "const","@",
-            "continue", "default", "do", "double", "else",
-            "enum", "extends", "final", "finally", "float",
-            "for", "goto", "if", "implements", "import",
-            "instanceof", "int", "interface", "long", "native",
-            "new", "package", "private", "protected", "public",
-            "return", "short", "static", "strictfp", "super",
-            "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while"
-    };
+    public static String[] KEYWORDS = Constants.STANDARD_KEY_WORDS;
 
-    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    static String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
     private static final String PAREN_PATTERN = "\\(|\\)";
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";
@@ -41,7 +31,7 @@ public class TextCodeArea {
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
     private static final String ASSIGNMENT_PATTERN = "\\s+\\w+?\\s+=" + "|" + "\\s+\\w+\\[.*\\]?\\s+=";
 
-    private static final Pattern PATTERN = Pattern.compile(
+    private Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
@@ -52,10 +42,29 @@ public class TextCodeArea {
                     + "|(?<ASSIGNMENT>" + ASSIGNMENT_PATTERN + ")"
     );
 
+    public static void setKeywordPattern(){
+        KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    }
+
+    public void compilePattern(){
+        PATTERN =  Pattern.compile(
+                "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+                        + "|(?<PAREN>" + PAREN_PATTERN + ")"
+                        + "|(?<BRACE>" + BRACE_PATTERN + ")"
+                        + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
+                        + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+                        + "|(?<STRING>" + STRING_PATTERN + ")"
+                        + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+                        + "|(?<ASSIGNMENT>" + ASSIGNMENT_PATTERN + ")"
+        );
+    }
+
     private final CodeArea codeArea;
     Subscription cleanupWhenNoLongerNeedIt;
 
-    public  TextCodeArea(AnchorPane pane, String s) {
+    public  TextCodeArea(AnchorPane pane, String s, String[] keywords) {
+        setKEYWORDS(keywords);
+        compilePattern();
         codeArea = new CodeArea();
         codeArea.appendText(s);
         VirtualizedScrollPane<CodeArea> sp = new VirtualizedScrollPane<>(codeArea);
@@ -96,7 +105,7 @@ public class TextCodeArea {
         return codeArea;
     }
 
-    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+    private StyleSpans<Collection<String>> computeHighlighting(String text) {
         int lastKwEnd = 0;
         Matcher matcher = PATTERN.matcher(text);
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
@@ -118,5 +127,14 @@ public class TextCodeArea {
         }
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
+    }
+
+    public String[] getKEYWORDS() {
+        return KEYWORDS;
+    }
+
+    public void setKEYWORDS(String[] KEYWORDS) {
+        this.KEYWORDS = KEYWORDS;
+        setKeywordPattern();
     }
 }

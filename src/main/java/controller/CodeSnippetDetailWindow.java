@@ -5,7 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.CodeSnippet;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -15,6 +14,7 @@ public class CodeSnippetDetailWindow {
     void showSnippetInStage(CodeSnippet codeSnippet){
 
         if(codeSnippet == null) return;
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxml/snippetDetail.fxml"));
         try {
@@ -31,8 +31,6 @@ public class CodeSnippetDetailWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
 

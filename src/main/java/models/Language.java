@@ -1,15 +1,31 @@
 package models;
 
+import util.Constants;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Language {
 
     int id;
     String name;
+    String[] keyWords = Constants.STANDARD_KEY_WORDS;
+
 
     public Language(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Language(String name, String keyWords) {
+        this.name = name;
+        this.keyWords = keyWords.split(",");
+    }
+
+    public Language(int id, String name, String[] keyWords) {
+        this.id = id;
+        this.name = name;
+        this.keyWords = keyWords;
     }
 
     public Language(String name) {
@@ -34,6 +50,14 @@ public class Language {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String[] getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String[] keyWords) {
+        this.keyWords = keyWords;
     }
 
     @Override
