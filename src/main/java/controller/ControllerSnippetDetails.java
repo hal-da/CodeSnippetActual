@@ -209,7 +209,6 @@ public class ControllerSnippetDetails {
                 textFieldDescription.textProperty().isEmpty().or(
                         textFieldTitle.textProperty().isEmpty().or(
                                 choiceBoxLanguage.valueProperty().isNull()
-                                       //TODO.or(Bindings.createBooleanBinding(callableTextField))
                         )
                 )
         );

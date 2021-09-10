@@ -27,9 +27,9 @@
          <Separator orientation="VERTICAL"/>
          <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="language" textAlignment="RIGHT"
                 HBox.hgrow="ALWAYS"/>
-         <ChoiceBox fx:id="choiceBoxLanguages"/>
+         <ChoiceBox fx:id="choiceBoxLanguages" onAction="#filterSnippetListByLanguage"/>
          <Label alignment="CENTER_RIGHT" text="Sort by:"/>
-         <ChoiceBox fx:id="choiceBoxSortBy"/>
+         <ChoiceBox fx:id="choiceBoxSortBy" onAction="#handleInputSort"/>
       </HBox>
       <ListView fx:id="listViewSnippets" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1800.0" prefWidth="1200.0">
          <VBox.margin>

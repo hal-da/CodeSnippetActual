@@ -1,24 +1,20 @@
 package controller;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Objects;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import models.CodeSnippet;
 import models.Language;
 import repository.CodeSnippetRepositoryJDBC;
 import repository.LanguageRepositoryJDBC;
 
 public class ControllerStart {
+
 
     @FXML
     private CheckBox checkBoxSearchTitle;
@@ -33,7 +29,7 @@ public class ControllerStart {
     private ChoiceBox<Language> choiceBoxLanguages;
 
     @FXML
-    private ChoiceBox<?> choiceBoxSortBy;
+    private ChoiceBox<String> choiceBoxSortBy;
 
     @FXML
     private ListView<CodeSnippet> listViewSnippets;
@@ -41,14 +37,29 @@ public class ControllerStart {
     @FXML
     private Button buttonNewSnippet;
 
+    private final String[] sortOptionsArr = new String[] {"Last change", "Language", "Title", "Times seen", "Description"};
+    private final ObservableList<String> sortOptions = FXCollections.observableArrayList(sortOptionsArr);
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
     private final CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
-    private ObservableList<Language> languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
     private ObservableList<CodeSnippet> codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
 
 
     public ControllerStart() throws SQLException {
         System.out.println("controller started");
+    }
+
+    @FXML
+    public void handleInputSort(){
+        System.out.println(choiceBoxSortBy.getValue());
+
+        switch (choiceBoxSortBy.getValue()) {
+            case "Last change" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange).reversed());
+            case "Language" -> codeSnippetObservableList.sort(Comparator.comparing(x -> x.getLanguage().getName()));
+            case "Title" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getTitle));
+            case "Times seen" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getTimesSeen).reversed());
+            case "Description" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getDescription));
+            default -> System.out.println("default");
+        }
     }
 
     @FXML
@@ -99,6 +110,8 @@ public class ControllerStart {
 
     private void openSnippetDetail(CodeSnippet codeSnippet){
 
+        if(codeSnippet == null) return;
+
         CodeSnippetDetailWindow codeSnippetDetailWindow = new CodeSnippetDetailWindow();
         codeSnippetDetailWindow.showSnippetInStage(codeSnippet);
 
@@ -107,6 +120,8 @@ public class ControllerStart {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        listViewSnippets.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -126,47 +141,47 @@ public class ControllerStart {
         listViewSnippets.setOnMouseClicked(click -> openSnippetDetail(listViewSnippets.getSelectionModel().getSelectedItem()));
 
         fillChoiceBox();
+        fillSortBox();
         try {
             codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
         } catch (Exception e){
             e.printStackTrace();
         }
         fillListView(codeSnippetObservableList);
-        addListenerToLanguageChoiceBox();
+        codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange).reversed());
     }
 
     private void fillListView(ObservableList<CodeSnippet> codeSnippetObservableList){
         listViewSnippets.setItems(codeSnippetObservableList);
     }
 
+    private void fillSortBox(){
+        choiceBoxSortBy.setItems(sortOptions);
+        choiceBoxSortBy.getSelectionModel().select(0);
+    }
+
     private void fillChoiceBox() throws SQLException {
-        languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
+        ObservableList<Language> languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
         choiceBoxLanguages.setItems(languages);
         choiceBoxLanguages.getItems().add(0,new Language("All"));
         choiceBoxLanguages.getSelectionModel().select(0);
     }
 
-    public void handleMousePressedSearchBar(MouseEvent mouseEvent) {
+    public void handleMousePressedSearchBar() {
         textFieldSearchBar.setText("");
         handleInputTextChangedSearch();
     }
 
-
-    private void addListenerToLanguageChoiceBox(){
-        choiceBoxLanguages.getSelectionModel().selectedItemProperty().addListener( (selection, oldValue, newValue) ->{
-            if(oldValue != null && newValue != null){
-                handleInputTextChangedSearch();
-            }
-        });
-    }
-
+    @FXML
     private void filterSnippetListByLanguage() {
+        System.out.println("filter lang");
         if(!choiceBoxLanguages.getSelectionModel().isSelected(0)){
-            ObservableList<CodeSnippet> languageFilteredList  = codeSnippetObservableList.
-                    stream()
+            ObservableList<CodeSnippet> languageFilteredList  = codeSnippetObservableList
+                    .stream()
                     .filter(codeSnippet -> codeSnippet.getLanguage().equals(choiceBoxLanguages.getSelectionModel().getSelectedItem()))
                     .collect(Collectors.toCollection(FXCollections::observableArrayList));
             fillListView(languageFilteredList);
         } else fillListView(codeSnippetObservableList);
     }
+
 }

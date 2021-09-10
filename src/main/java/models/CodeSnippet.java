@@ -19,21 +19,13 @@ public class CodeSnippet {
     public CodeSnippet() {
     }
 
-    public CodeSnippet(String title, String description, boolean isFavourite, String snippet, Language language, URL url, int timesSeen) {
-        this.title = title;
-        this.description = description;
-        this.isFavourite = isFavourite;
-        this.snippet = snippet;
-        this.language = language;
-        this.url = url;
-        this.timesSeen = timesSeen;
-    }
+
 
 
     //new from DB
     public CodeSnippet(int id, String title, String description, boolean isFavourite, String snippet, Language language, URL url, LocalDate lastChange, int timesSeen) {
         this.id = id;
-        this.title = title;
+        this.title = title + " " + timesSeen;
         this.description = description;
         this.isFavourite = isFavourite;
         this.snippet = snippet;

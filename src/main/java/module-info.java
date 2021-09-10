@@ -7,8 +7,10 @@ module CodeSnippetSU {
     requires flowless;
     requires reactfx;
     requires org.fxmisc.richtext;
-
+    requires org.junit.jupiter.api;
+    requires junit;
 
     opens controller;
     opens app;
+    opens models;
 }

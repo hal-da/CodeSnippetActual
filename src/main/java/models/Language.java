@@ -16,6 +16,10 @@ public class Language {
         this.name = name;
     }
 
+    public Language() {
+
+    }
+
     public int getId() {
         return id;
     }

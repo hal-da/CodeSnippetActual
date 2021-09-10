@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import models.CodeSnippet;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Objects;
 
 public class CodeSnippetDetailWindow {
@@ -29,9 +28,6 @@ public class CodeSnippetDetailWindow {
             stage.setTitle("Create new CodeSnippet");
             stage.setScene(scene);
             stage.showAndWait();
-//TODO: alles das in eine windowklasse - phptlibrry übungsbeispiele
-            //refresh list
-            //initialize();
         } catch (IOException e) {
             e.printStackTrace();
         }

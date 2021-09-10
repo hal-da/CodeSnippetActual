@@ -77,11 +77,6 @@ public class ControllerEditLanguage {
             languageRepositoryJDBC.update(new Language(languageId,languageName));
         }
 
-
-/*        System.out.println(choiceBoxLanguages.getSelectionModel().getSelectedIndex());
-        System.out.println(textFieldLanguage.getText());
-        System.out.println(choiceBoxLanguages.getSelectionModel().getSelectedItem().getId());*/
-
         closeStage();
     }
 
