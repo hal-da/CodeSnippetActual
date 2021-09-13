@@ -40,8 +40,8 @@ public class DataBaseSetup {
         }
 
         if (statement != null) {
-            statement.execute("DROP table snippets");
-            statement.execute("DROP table languages");
+/*            statement.execute("DROP table snippets");
+            statement.execute("DROP table languages");*/
             try {
                 statement.execute(CREATE_TABLE_LANGUAGE);
                 System.out.println("lang created");
