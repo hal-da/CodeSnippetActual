@@ -42,6 +42,9 @@ public class ControllerSnippetDetails {
     private SVGPath svgIsFavorite;
 
     @FXML
+    private Button btnCancel;
+
+    @FXML
     private Button btnSave;
     @FXML
     private Button btnDelete;
@@ -150,8 +153,6 @@ public class ControllerSnippetDetails {
 
         textFieldTitle.setText(codeSnippet.getTitle());
         choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
-        String url = String.valueOf(codeSnippet.getUrl());
-        textFieldLink.setText(url.isEmpty() || url.equals("null") ? "" : url);
         labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
         textFieldDescription.setText(codeSnippet.getDescription());
         System.out.println(Arrays.toString(keywords));
@@ -203,17 +204,6 @@ public class ControllerSnippetDetails {
         codeSnippet.setDescription(textFieldDescription.getText());
         codeSnippet.setSnippet(textCodeArea.getText());
         codeSnippet.setLanguage(choiceBoxLanguage.getValue());
-        try {
-            codeSnippet.setUrl(new URL(textFieldLink.getText()));
-        } catch (MalformedURLException e) {
-            try {
-                if(textFieldLink.getText().isEmpty()) codeSnippet.setUrl(null);
-                //todo better malformedurlhandling
-                else codeSnippet.setUrl(new URL("http://www."+textFieldLink.getText()));
-            } catch (MalformedURLException malformedURLException) {
-                malformedURLException.printStackTrace();
-            }
-        }
         codeSnippet.setLastChange(LocalDate.now());
     }
 
