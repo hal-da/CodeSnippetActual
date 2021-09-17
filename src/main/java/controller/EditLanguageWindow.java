@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class EditLanguageWindow {
 
+    private Stage stage;
+
 
     void showLanguageEditWindow(Language selectedLanguage){
 
@@ -21,13 +23,18 @@ public class EditLanguageWindow {
             ControllerEditLanguage controllerEditLanguage = fxmlLoader.getController();
             controllerEditLanguage.setSelectedLanguage(selectedLanguage);
             Scene scene = new Scene(parent);
-            Stage stage = new Stage();
+            stage = new Stage();
             stage.setTitle("Edit Languages");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
-            stage.showAndWait();
+            //stage.showAndWait();
+
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

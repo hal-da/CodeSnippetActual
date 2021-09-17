@@ -143,11 +143,7 @@ public class ControllerStart {
 
         fillChoiceBox();
         fillSortBox();
-        try {
-            codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
         fillListView(codeSnippetObservableList);
         codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange).reversed());
     }
