@@ -42,8 +42,8 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
             String languageName = resultSet.getString(2);
             String[] keyWords = resultSet.getString(3).split(",");
             Language language = new Language(languageId,languageName, keyWords);
-            System.out.println("lang from table");
-            System.out.println(language);
+            System.out.println(language.getName() + "language loaded from table");
+//            System.out.println(language);
             languages.add(language);
         }
 
@@ -60,7 +60,6 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
             int langId = resultSet.getInt(1);
             String langName = resultSet.getString(2);
             String[] keyWords = resultSet.getString(3).split(",");
-            System.out.println(Arrays.toString(keyWords) + " keywords from table");
             language = new Language(langId,langName,keyWords);
         }
         return Optional.ofNullable(language);
@@ -75,7 +74,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         preparedStatement.setInt(3,language.getId());
 
         preparedStatement.executeUpdate();
-        System.out.println(language);
+        System.out.println(language + " UPDATED IN REPO");
         return language;
     }
 

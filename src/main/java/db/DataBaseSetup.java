@@ -55,6 +55,5 @@ public class DataBaseSetup {
                 System.out.println(sqlException);
             }
         }
-
     }
 }

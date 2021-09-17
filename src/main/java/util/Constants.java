@@ -15,7 +15,7 @@ public class Constants {
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while"
+            "transient", "try", "void", "volatile", "while", "null"
     };
 
     public static final String CONNECTION_STRING = String.format("jdbc:derby:codeSnippetDB; user=%s; password=%s; create=true",USER_NAME,USER_PW);

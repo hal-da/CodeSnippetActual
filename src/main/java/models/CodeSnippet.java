@@ -17,7 +17,7 @@ public class CodeSnippet {
     LocalDate createdAt = LocalDate.now();
     int timesSeen = 0;
 
-    //only fpr unit test
+    //only for unit test
     public CodeSnippet() {
     }
 

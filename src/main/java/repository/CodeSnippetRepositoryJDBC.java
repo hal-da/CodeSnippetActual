@@ -122,7 +122,6 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
         URL url = null;
         String urlFromDB = resultSet.getString(7);
         if(urlFromDB != null ){
-            System.out.println(urlFromDB);
             try {
                 url = new URL(urlFromDB);
             } catch (MalformedURLException e){

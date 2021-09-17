@@ -10,13 +10,19 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Language;
 import repository.LanguageRepositoryJDBC;
 
 public class ControllerEditLanguage {
+
+
+
+    private Language selectedLanguage;
 
     @FXML
     private ChoiceBox<Language> choiceBoxLanguages;
@@ -37,7 +43,9 @@ public class ControllerEditLanguage {
     private TextArea textAreaKeyWords;
 
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
-    private final ObservableList<Language> languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
+    private ObservableList<Language> languages;
+
+
 
     public ControllerEditLanguage() throws SQLException {
 
@@ -91,6 +99,8 @@ public class ControllerEditLanguage {
 
     private void closeStage(){
         Stage stage = (Stage) btnCancel.getScene().getWindow();
+        Parent parent = btnCancel.getParent();
+        //parent.
         stage.close();
     }
 
@@ -123,6 +133,7 @@ public class ControllerEditLanguage {
     }
 
     private void disableDeleteBtn(){
+
         btnDelete.setDisable(true);
         choiceBoxLanguages.getSelectionModel().selectedItemProperty().addListener(o -> {
             btnDelete.setDisable(false);
@@ -131,13 +142,22 @@ public class ControllerEditLanguage {
     }
 
     private void fillChoiceBox() throws SQLException {
-        FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
+        languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
         Language newLanguage = new Language("new language");
         languages.add(0, newLanguage);
         choiceBoxLanguages.setItems(languages);
-/*        choiceBoxLanguages.getItems().add(0,new Language("New Language"));*/
-        choiceBoxLanguages.getSelectionModel().select(0);
-        textFieldLanguage.setText(languages.get(0).getName());
-        textAreaKeyWords.setText(String.join(", ",languages.get(0).getKeyWords()));
+        setFormToSelectedLang(newLanguage);
+    }
+
+    private void setFormToSelectedLang(Language language){
+        choiceBoxLanguages.getSelectionModel().select(language);
+        textFieldLanguage.setText(language.getName());
+        textAreaKeyWords.setText(String.join(", ",language.getKeyWords()));
+    }
+
+    public void setSelectedLanguage(Language selectedLanguage) {
+        this.selectedLanguage = selectedLanguage;
+        if(selectedLanguage != null) setFormToSelectedLang(selectedLanguage);
+        System.out.println(selectedLanguage +  " selected lang");
     }
 }

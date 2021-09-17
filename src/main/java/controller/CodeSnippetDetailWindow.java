@@ -20,7 +20,8 @@ public class CodeSnippetDetailWindow {
         try {
             Parent root = fxmlLoader.load();
             ControllerSnippetDetails controllerSnippetDetails = fxmlLoader.getController();
-            controllerSnippetDetails.populateViewWithExistingCodeSnippet(codeSnippet);
+            controllerSnippetDetails.setCodeSnippet(codeSnippet);
+            controllerSnippetDetails.populateViewWithExistingCodeSnippet();
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/java-keywords.css")).toExternalForm());

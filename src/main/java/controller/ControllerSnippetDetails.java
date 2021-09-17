@@ -2,14 +2,11 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.SVGPath;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.CodeSnippet;
 import models.Language;
@@ -17,7 +14,7 @@ import repository.CodeSnippetRepositoryJDBC;
 import repository.LanguageRepositoryJDBC;
 import util.Constants;
 import view.TextCodeArea;
-import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,8 +28,14 @@ public class ControllerSnippetDetails {
     private TextCodeArea textCodeArea;
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
     private final CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
+    ObservableList<Language> languages;
 
     private int codeSnippetId = 0;
+
+    public void setCodeSnippet(CodeSnippet codeSnippet) {
+        this.codeSnippet = codeSnippet;
+    }
+
     private CodeSnippet codeSnippet;
 
     @FXML
@@ -71,16 +74,17 @@ public class ControllerSnippetDetails {
     }
 
     @FXML
-    void handlerBtnEditLanguage() {
+    void handlerBtnEditLanguage() throws SQLException {
+
+        int languageId = choiceBoxLanguage.getSelectionModel().getSelectedItem().getId();
+        Language changedLanguage = languageRepositoryJDBC.read(languageId).orElse(choiceBoxLanguage.getSelectionModel().getSelectedItem());
 
         EditLanguageWindow editLanguageWindow = new EditLanguageWindow();
-        editLanguageWindow.showLanguageEditWindow();
-
-        try {
-            fillCHeckBox();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        editLanguageWindow.showLanguageEditWindow(changedLanguage);
+        System.out.println("handlerBtnEditLanguage called " + choiceBoxLanguage.getSelectionModel().getSelectedItem().getId());
+        String textCodeAreaText = textCodeArea.getText();
+        System.out.println(textCodeAreaText);
+        createTextCodeArea(changedLanguage.getKeyWords(),textCodeAreaText);
     }
 
 
@@ -104,22 +108,19 @@ public class ControllerSnippetDetails {
         assert anchorPane != null : "fx:id=\"anchorPane\" was not injected: check your FXML file 'snippetDetail.fxml'.";
         assert textFieldDescription != null : "fx:id=\"textFieldDescription\" was not injected: check your FXML file 'snippetDetail.fxml'.";
 
+        textFieldTitle.setPromptText("Title");
+        textFieldDescription.setPromptText("Description");
+
         labelDate.setText(String.valueOf(LocalDate.now()));
-        //textCodeArea = new TextCodeArea(anchorPane, "", Constants.STANDARD_KEY_WORDS);
-        //textCodeArea.setKEYWORDS(codeSnippet.getLanguage().getKeyWords());
+        languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
+        choiceBoxLanguage.setItems(languages);
 
         disableButtonsAtStart(btnSave);
         disableButtonsAtStart(btnDelete);
-        fillCHeckBox();
     }
 
-    public void populateViewWithExistingCodeSnippet(CodeSnippet c){
-        codeSnippet = c;
-        String[] keywords = codeSnippet.getLanguage() == null ?  Constants.STANDARD_KEY_WORDS : codeSnippet.getLanguage().getKeyWords();
-/*        textCodeArea = new TextCodeArea(anchorPane, "", keywords);
-        System.out.println(Arrays.toString(textCodeArea.getKEYWORDS()));*/
+    public void populateViewWithExistingCodeSnippet(){
         codeSnippetId = codeSnippet.getId();
-
         //raise timesSeen in CodeSnippet & save it
         if(codeSnippetId != 0){
             codeSnippet.setTimesSeen(codeSnippet.getTimesSeen()+1);
@@ -131,8 +132,12 @@ public class ControllerSnippetDetails {
         } else {
             btnDelete.setVisible(false);
         }
+        populateView();
+    }
 
-        //populate view
+    private void populateView(){
+        String[] keywords = codeSnippet.getLanguage() == null ?  Constants.STANDARD_KEY_WORDS : codeSnippet.getLanguage().getKeyWords();
+
         textFieldTitle.setText(codeSnippet.getTitle());
         choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
         String url = String.valueOf(codeSnippet.getUrl());
@@ -140,19 +145,16 @@ public class ControllerSnippetDetails {
         labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
         textFieldDescription.setText(codeSnippet.getDescription());
         System.out.println(Arrays.toString(keywords));
-        TextCodeArea.KEYWORDS = keywords;
-        TextCodeArea.setKeywordPattern();
-        //TextCodeArea.compilePattern();
-        textCodeArea = new TextCodeArea(anchorPane,codeSnippet.getSnippet(), keywords);
+        createTextCodeArea(keywords, codeSnippet.getSnippet());
 
         svgIsFavorite.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
         labelTimesSeen.setText(String.valueOf(codeSnippet.getTimesSeen()));
     }
 
-    private void fillCHeckBox() throws SQLException {
-        ObservableList<Language> languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
-        choiceBoxLanguage.setItems(languages);
-        choiceBoxLanguage.getSelectionModel().select(0);
+    private void createTextCodeArea(String[] keywords, String snippet) {
+        TextCodeArea.KEYWORDS = keywords;
+        TextCodeArea.setKeywordPattern();
+        textCodeArea = new TextCodeArea(anchorPane,snippet, keywords);
     }
 
     @FXML
@@ -212,8 +214,6 @@ public class ControllerSnippetDetails {
         svgIsFavorite.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
     }
 
-
-
     private void disableButtonsAtStart(Button button){
 
         button.disableProperty().bind(
@@ -223,5 +223,15 @@ public class ControllerSnippetDetails {
                         )
                 )
         );
+    }
+
+    public void choiceBoxLanguageChanged(ActionEvent actionEvent) {
+        if(textCodeArea == null) return;
+        System.out.println(choiceBoxLanguage.getSelectionModel().getSelectedItem());
+        Language selectedLanguage = choiceBoxLanguage.getSelectionModel().getSelectedItem();
+        String text = textCodeArea.getText();
+        System.out.println(text);
+        createTextCodeArea(selectedLanguage.getKeyWords(), text );
+        choiceBoxLanguage.getSelectionModel().select(selectedLanguage);
     }
 }
