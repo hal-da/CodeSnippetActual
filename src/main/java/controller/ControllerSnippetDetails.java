@@ -42,6 +42,9 @@ public class ControllerSnippetDetails {
     private SVGPath svgIsFavorite;
 
     @FXML
+    private Button btnCancel;
+
+    @FXML
     private Button btnSave;
     @FXML
     private Button btnDelete;
@@ -71,7 +74,6 @@ public class ControllerSnippetDetails {
     private TextArea textFieldDescription;
 
     public ControllerSnippetDetails() throws SQLException {
-        System.out.println("CONSTRUCTORRRRRRRRRRRRRRRRRRRRRRRRRRRR");
     }
 
     @FXML
@@ -88,8 +90,9 @@ public class ControllerSnippetDetails {
         choiceBoxLanguage.setItems(languages);
         choiceBoxLanguage.getSelectionModel().select(changedLanguage);
         String textCodeAreaText = textCodeArea.getText();
-        System.out.println(textCodeAreaText);
         String[] keyWords = changedLanguage == null ? Constants.STANDARD_KEY_WORDS : changedLanguage.getKeyWords();
+        System.out.println("KEYWORDS FROM CONTROLLER SNIPPET DETAIL: " + Arrays.toString(keyWords));
+
         createTextCodeArea(keyWords,textCodeAreaText);
     }
 
@@ -150,8 +153,6 @@ public class ControllerSnippetDetails {
 
         textFieldTitle.setText(codeSnippet.getTitle());
         choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
-        String url = String.valueOf(codeSnippet.getUrl());
-        textFieldLink.setText(url.isEmpty() || url.equals("null") ? "" : url);
         labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
         textFieldDescription.setText(codeSnippet.getDescription());
         System.out.println(Arrays.toString(keywords));
@@ -203,17 +204,6 @@ public class ControllerSnippetDetails {
         codeSnippet.setDescription(textFieldDescription.getText());
         codeSnippet.setSnippet(textCodeArea.getText());
         codeSnippet.setLanguage(choiceBoxLanguage.getValue());
-        try {
-            codeSnippet.setUrl(new URL(textFieldLink.getText()));
-        } catch (MalformedURLException e) {
-            try {
-                if(textFieldLink.getText().isEmpty()) codeSnippet.setUrl(null);
-                //todo better malformedurlhandling
-                else codeSnippet.setUrl(new URL("http://www."+textFieldLink.getText()));
-            } catch (MalformedURLException malformedURLException) {
-                malformedURLException.printStackTrace();
-            }
-        }
         codeSnippet.setLastChange(LocalDate.now());
     }
 
@@ -240,7 +230,6 @@ public class ControllerSnippetDetails {
         System.out.println(choiceBoxLanguage.getSelectionModel().getSelectedItem());
         Language selectedLanguage = choiceBoxLanguage.getSelectionModel().getSelectedItem();
         String text = textCodeArea.getText();
-        System.out.println(text);
         String[] keywords = selectedLanguage == null ? Constants.STANDARD_KEY_WORDS : selectedLanguage.getKeyWords();
         createTextCodeArea(keywords, text );
         choiceBoxLanguage.getSelectionModel().select(selectedLanguage);

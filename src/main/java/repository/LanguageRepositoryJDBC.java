@@ -42,8 +42,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
             String languageName = resultSet.getString(2);
             String[] keyWords = resultSet.getString(3).split(",");
             Language language = new Language(languageId,languageName, keyWords);
-            System.out.println(language.getName() + "language loaded from table");
-//            System.out.println(language);
+            System.out.println(language.getName() + " language loaded from table - languagerepo");
             languages.add(language);
         }
 

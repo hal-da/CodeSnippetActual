@@ -16,7 +16,10 @@
 }
 
 .styled-text-area .text.assignment {
-    -fx-fill: #CC7832;
+    -fx-fill: white;
+}
+.styled-text-area .text.function {
+    -fx-fill: yellow;
 }
 
 .styled-text-area .text.keyword {
@@ -28,8 +31,6 @@
     -fx-fill: #CC7832;
 }
 
-
-
 .styled-text-area .text.string {
     -fx-fill: #6A8759;
 }
@@ -37,3 +38,16 @@
 .styled-text-area .text.comment {
     -fx-fill: grey;
 }
+
+
+
+.styled-text-area .text.digit {
+    -fx-fill: #73a5eb;
+}
+
+.styled-text-area .text.method {
+    -fx-fill: #8962d9;
+}
+
+
+

@@ -30,16 +30,22 @@ public class TextCodeArea {
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
     private static final String ASSIGNMENT_PATTERN = "\\s+\\w+?\\s+=" + "|" + "\\s+\\w+\\[.*\\]?\\s+=";
+    private static final String FUNCTION_PATTERN = "(\\s(?!((if)|(while)|(switch)|(do)))([a-z][\\w]*))(?=(\\s*\\())";
+    private static final String DIGIT_PATTERN = "\\d+\\.?\\d?";
+    private static final String METHOD_CALL_PATTERN = "(?<=\\.)([a-z]\\w+)(?=(\\.|\\())";
 
     private Pattern PATTERN = Pattern.compile(
-            "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-                    + "|(?<PAREN>" + PAREN_PATTERN + ")"
-                    + "|(?<BRACE>" + BRACE_PATTERN + ")"
-                    + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-                    + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-                    + "|(?<STRING>" + STRING_PATTERN + ")"
-                    + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
-                    + "|(?<ASSIGNMENT>" + ASSIGNMENT_PATTERN + ")"
+            "(?<FUNCTION>"+ FUNCTION_PATTERN + ")"
+            + "|(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+            + "|(?<PAREN>" + PAREN_PATTERN + ")"
+            + "|(?<BRACE>" + BRACE_PATTERN + ")"
+            + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
+            + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+            + "|(?<STRING>" + STRING_PATTERN + ")"
+            + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+            + "|(?<ASSIGNMENT>" + ASSIGNMENT_PATTERN + ")"
+            + "|(?<DIGIT>"+DIGIT_PATTERN + ")"
+            + "|(?<METHOD>" + METHOD_CALL_PATTERN +")"
     );
 
     public static void setKeywordPattern(){
@@ -48,14 +54,17 @@ public class TextCodeArea {
 
     public void compilePattern(){
         PATTERN =  Pattern.compile(
-                "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-                        + "|(?<PAREN>" + PAREN_PATTERN + ")"
-                        + "|(?<BRACE>" + BRACE_PATTERN + ")"
-                        + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-                        + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-                        + "|(?<STRING>" + STRING_PATTERN + ")"
-                        + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
-                        + "|(?<ASSIGNMENT>" + ASSIGNMENT_PATTERN + ")"
+                "(?<FUNCTION>"+ FUNCTION_PATTERN + ")"
+                + "|(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+                + "|(?<PAREN>" + PAREN_PATTERN + ")"
+                + "|(?<BRACE>" + BRACE_PATTERN + ")"
+                + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
+                + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+                + "|(?<STRING>" + STRING_PATTERN + ")"
+                + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+                + "|(?<ASSIGNMENT>" + ASSIGNMENT_PATTERN + ")"
+                + "|(?<DIGIT>"+DIGIT_PATTERN + ")"
+                + "|(?<METHOD>" + METHOD_CALL_PATTERN +")"
         );
     }
 
@@ -94,9 +103,7 @@ public class TextCodeArea {
         });
     }
 
-    public void cleanUp(){
-        cleanupWhenNoLongerNeedIt.unsubscribe();
-    }
+    public void cleanUp(){cleanupWhenNoLongerNeedIt.unsubscribe();}
     public String getText(){
         return codeArea.getText();
     }
@@ -112,15 +119,18 @@ public class TextCodeArea {
 
         while(matcher.find()) {
             String styleClass =
+                    matcher.group("FUNCTION") != null ? "function" :
                     matcher.group("KEYWORD") != null ? "keyword" :
-                            matcher.group("PAREN") != null ? "paren" :
-                                    matcher.group("BRACE") != null ? "brace" :
-                                            matcher.group("BRACKET") != null ? "bracket" :
-                                                    matcher.group("SEMICOLON") != null ? "semicolon" :
-                                                            matcher.group("STRING") != null ? "string" :
-                                                                    matcher.group("COMMENT") != null ? "comment" :
-                                                                            matcher.group("ASSIGNMENT") != null ? "assignment" :
-                                                                                    null; /* never happens */ assert styleClass != null;
+                    matcher.group("PAREN") != null ? "paren" :
+                    matcher.group("BRACE") != null ? "brace" :
+                    matcher.group("BRACKET") != null ? "bracket" :
+                    matcher.group("SEMICOLON") != null ? "semicolon" :
+                    matcher.group("STRING") != null ? "string" :
+                    matcher.group("COMMENT") != null ? "comment" :
+                    matcher.group("ASSIGNMENT") != null ? "assignment" :
+                    matcher.group("DIGIT") != null ? "digit" :
+                    matcher.group("METHOD") != null ? "method" :
+                    null; /* never happens */ assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();

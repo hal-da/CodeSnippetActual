@@ -59,19 +59,6 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
         return codeSnippets;
     }
 
-/*    @Override
-    public Optional<CodeSnippet> read(int codeSnippetId) throws SQLException {
-        //methode ist ungenutzt
-*//*        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM snippets WHERE snippet_id = ?");
-        preparedStatement.setInt(1,codeSnippetId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        CodeSnippet codeSnippet = getCodeSnippetFromResultSet(resultSet);
-        System.out.println(codeSnippet);
-        return Optional.of(codeSnippet);*//*
-        return null;
-    }*/
-
 
     @Override
     public void update(CodeSnippet codeSnippet) throws SQLException {
@@ -118,17 +105,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
         boolean favourite = resultSet.getBoolean(4);
         String snippet = resultSet.getString(5);
         Language language = languageRepositoryJDBC.read(resultSet.getInt(6)).orElse(new Language("unreadable, should not have happened"));
-
-        URL url = null;
         String urlFromDB = resultSet.getString(7);
-        if(urlFromDB != null ){
-            try {
-                url = new URL(urlFromDB);
-            } catch (MalformedURLException e){
-                System.out.println("url is null, not a problem");
-            }
-        }
-
         Date date = resultSet.getDate(8);
         int timesSeen = resultSet.getInt(9);
         Date createdAt = resultSet.getDate(10);
@@ -140,7 +117,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
                 favourite,
                 snippet,
                 language,
-                url,
+                null,
                 date.toLocalDate(),
                 timesSeen,
                 createdAt.toLocalDate()

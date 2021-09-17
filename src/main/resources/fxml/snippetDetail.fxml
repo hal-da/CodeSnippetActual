@@ -52,11 +52,6 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
          </VBox.margin>
       </AnchorPane>
-      <TextField fx:id="textFieldLink">
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-         </VBox.margin>
-      </TextField>
       <TextArea fx:id="textFieldDescription" text="description">
          <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
