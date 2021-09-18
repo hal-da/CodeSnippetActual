@@ -2,6 +2,7 @@ package controller;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,14 +16,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import models.CodeSnippet;
 import models.Language;
+import repository.CodeSnippetRepositoryJDBC;
 import repository.LanguageRepositoryJDBC;
 
 public class ControllerEditLanguage {
 
-
-
-    private Language selectedLanguage;
 
     @FXML
     private ChoiceBox<Language> choiceBoxLanguages;
@@ -43,8 +43,6 @@ public class ControllerEditLanguage {
     private TextArea textAreaKeyWords;
 
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
-    private ObservableList<Language> languages;
-
 
 
     public ControllerEditLanguage() throws SQLException {
@@ -62,22 +60,43 @@ public class ControllerEditLanguage {
     @FXML
     void handleBtnDelete(ActionEvent event) throws SQLException {
         int choiceBoxSelectedIndex = choiceBoxLanguages.getSelectionModel().getSelectedIndex();
+
         if(choiceBoxSelectedIndex != 0){
+            CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
+            Language languageFromChoiceBox = choiceBoxLanguages.getSelectionModel().getSelectedItem();
+
+            Optional<CodeSnippet> codeSnippetOptional = codeSnippetRepositoryJDBC.readAll()
+                    .stream()
+                    .filter(codeSnippet -> codeSnippet.getLanguage().getId() == languageFromChoiceBox.getId())
+                            .findFirst();
+
+            if (codeSnippetOptional.isPresent()) {
+                deleteSnippetsBeforeLanguageShowDialog();
+            } else readyToDeleteShowDialog();
 
             //SHow Dialog - only delete if button pressed OK
             //TODO: on delete CASCADE
+        }
+    }
 
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setContentText("Are you really really sure?");
-            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK,ButtonType.CANCEL);
-            Optional<ButtonType> result = dialog.showAndWait();
+    private void deleteSnippetsBeforeLanguageShowDialog(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setContentText("There are snippets associated with this language. \n Please delete or change these snippets first");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+        dialog.showAndWait();
+    }
 
-            if(result.isPresent() && result.get() == ButtonType.OK) {
-                int languageId = choiceBoxLanguages.getSelectionModel().getSelectedItem().getId();
-                String languageName = choiceBoxLanguages.getSelectionModel().getSelectedItem().getName();
-                languageRepositoryJDBC.delete(new Language(languageId, languageName));
-                closeStage();
-            }
+    private void readyToDeleteShowDialog() throws SQLException {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setContentText("Are you really really sure?");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK,ButtonType.CANCEL);
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            int languageId = choiceBoxLanguages.getSelectionModel().getSelectedItem().getId();
+            String languageName = choiceBoxLanguages.getSelectionModel().getSelectedItem().getName();
+            languageRepositoryJDBC.delete(new Language(languageId, languageName));
+            closeStage();
         }
     }
 
@@ -136,7 +155,7 @@ public class ControllerEditLanguage {
     }
 
     private void fillChoiceBox() throws SQLException {
-        languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
+        ObservableList<Language> languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
         Language newLanguage = new Language("new language");
         languages.add(0, newLanguage);
         choiceBoxLanguages.setItems(languages);
@@ -150,7 +169,6 @@ public class ControllerEditLanguage {
     }
 
     public void setSelectedLanguage(Language selectedLanguage) {
-        this.selectedLanguage = selectedLanguage;
         if(selectedLanguage != null) setFormToSelectedLang(selectedLanguage);
         System.out.println(selectedLanguage +  " selected lang");
     }

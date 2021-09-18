@@ -201,14 +201,14 @@ public class ControllerSnippetDetails {
         closeStage();
     }
 
-    private void createCodeSnippetFromFormData() {
+    private void createCodeSnippetFromFormData() throws SQLException {
         if(codeSnippet == null){
             codeSnippet = new CodeSnippet();
         }
         codeSnippet.setTitle(textFieldTitle.getText());
         codeSnippet.setDescription(textFieldDescription.getText());
         codeSnippet.setSnippet(textCodeArea.getText());
-        codeSnippet.setLanguage(choiceBoxLanguage.getValue());
+        codeSnippet.setLanguage(languageRepositoryJDBC.read(choiceBoxLanguage.getSelectionModel().getSelectedItem().getId()).orElse(choiceBoxLanguage.getSelectionModel().getSelectedItem()));
         codeSnippet.setLastChange(LocalDate.now());
     }
 
