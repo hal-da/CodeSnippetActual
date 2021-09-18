@@ -73,9 +73,6 @@ public class ControllerEditLanguage {
             if (codeSnippetOptional.isPresent()) {
                 deleteSnippetsBeforeLanguageShowDialog();
             } else readyToDeleteShowDialog();
-
-            //SHow Dialog - only delete if button pressed OK
-            //TODO: on delete CASCADE
         }
     }
 
