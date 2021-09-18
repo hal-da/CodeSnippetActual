@@ -215,12 +215,10 @@ public class ControllerSnippetDetails {
     private void disableButtonsAtStart(Button button){
 
         button.disableProperty().bind(
-                textFieldDescription.textProperty().isEmpty().or(
                         textFieldTitle.textProperty().isEmpty().or(
                                 choiceBoxLanguage.valueProperty().isNull()
                         )
-                )
-        );
+                );
     }
 
     public void choiceBoxLanguageChanged(ActionEvent actionEvent) {

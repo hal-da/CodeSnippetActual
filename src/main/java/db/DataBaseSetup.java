@@ -1,5 +1,9 @@
 package db;
 
+import models.CodeSnippet;
+import models.Language;
+import repository.CodeSnippetRepositoryJDBC;
+import repository.LanguageRepositoryJDBC;
 import util.Constants;
 import java.sql.*;
 
@@ -40,20 +44,63 @@ public class DataBaseSetup {
         }
 
         if (statement != null) {
-/*            statement.execute("DROP table snippets");
-            statement.execute("DROP table languages");*/
+            statement.execute("DROP table snippets");
+            statement.execute("DROP table languages");
             try {
                 statement.execute(CREATE_TABLE_LANGUAGE);
-                System.out.println("lang created");
+                System.out.println("table lang created");
             } catch (SQLException sqlException) {
                 System.out.println(sqlException);
             }
             try {
                 statement.execute(CREATE_TABLE_SNIPPETS);
-                System.out.println("snippets created");
+                System.out.println("table snippets created");
+                createAndInsertLanguageJavaAndFirstCodeSnippetIntoDB();
             } catch (SQLException sqlException) {
                 System.out.println(sqlException);
             }
         }
+    }
+
+
+    private static void createAndInsertLanguageJavaAndFirstCodeSnippetIntoDB() throws  SQLException {
+        CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
+        LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
+
+        //create and insert language
+
+        Language java = new Language("Java");
+        java.setKeyWords(Constants.STANDARD_KEY_WORDS);
+        java.setId(languageRepositoryJDBC.insert(java));
+
+        //create and insert codesnippet
+
+        CodeSnippet codeSnippet = new CodeSnippet();
+        codeSnippet.setTitle("TestSnippet");
+        codeSnippet.setDescription("This is a TestSnippet. Change me, delete me, play with me");
+        codeSnippet.setFavourite(true);
+        codeSnippet.setLanguage(java);
+        codeSnippet.setSnippet("""
+                public class Main {
+                \t
+                \taFunction(5);
+                \t
+
+                \tprivate void aFunction(int a){
+                \t\twhile(a < 10){
+                \t\t\tSystem.out.println("This is testsnippet");
+                \t\t}\t
+                \t}
+                \t/*
+                \t\tcolor palette is inspired by intellij darcula theme
+                \t*/
+                }""");
+
+        codeSnippetRepositoryJDBC.insert(codeSnippet);
+
+
+        System.out.println("inserted test snippet");
+
+
     }
 }

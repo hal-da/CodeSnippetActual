@@ -27,7 +27,7 @@ public class CodeSnippet {
     //new from DB
     public CodeSnippet(int id, String title, String description, boolean isFavourite, String snippet, Language language, URL url, LocalDate lastChange, int timesSeen, LocalDate createdAt) {
         this.id = id;
-        this.title = title + " " + timesSeen;
+        this.title = title;
         this.description = description;
         this.isFavourite = isFavourite;
         this.snippet = snippet;
