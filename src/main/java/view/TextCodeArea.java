@@ -30,9 +30,9 @@ public class TextCodeArea {
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
     private static final String ASSIGNMENT_PATTERN = "\\s+\\w+?\\s+=" + "|" + "\\s+\\w+\\[.*\\]?\\s+=";
-    private static final String FUNCTION_PATTERN = "(\\s(?!((if)|(while)|(switch)|(do)))([a-z][\\w]*))(?=(\\s*\\())";
+    private static final String FUNCTION_PATTERN = "(\\s(?!((if)|(while)|(switch)|(do)|("+String.join(")|(",KEYWORDS)+")))([a-z][\\w]*))(?=(\\s*\\())";
     private static final String DIGIT_PATTERN = "\\d+\\.?\\d?";
-    private static final String METHOD_CALL_PATTERN = "(?<=\\.)([a-z]\\w+)(?=(\\.|\\())";
+    private static final String METHOD_CALL_PATTERN = "(?<=\\.)([a-z]\\w+)(?=([.(]))";
 
     private Pattern PATTERN = Pattern.compile(
             "(?<FUNCTION>"+ FUNCTION_PATTERN + ")"
