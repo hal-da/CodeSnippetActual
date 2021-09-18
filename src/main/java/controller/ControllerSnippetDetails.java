@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 
 public class ControllerSnippetDetails {
@@ -86,20 +87,20 @@ public class ControllerSnippetDetails {
         editLanguageWindow.showLanguageEditWindow(changedLanguage);
         Stage stage = editLanguageWindow.getStage();
         stage.showAndWait();
+
         languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
         choiceBoxLanguage.setItems(languages);
         choiceBoxLanguage.getSelectionModel().select(changedLanguage);
-        String textCodeAreaText = textCodeArea.getText();
-        String[] keyWords = changedLanguage == null ? Constants.STANDARD_KEY_WORDS : changedLanguage.getKeyWords();
-        System.out.println("KEYWORDS FROM CONTROLLER SNIPPET DETAIL: " + Arrays.toString(keyWords));
 
-        createTextCodeArea(keyWords,textCodeAreaText);
+        String textCodeAreaText = textCodeArea.getText();
+        changedLanguage = languageRepositoryJDBC.read(changedLanguage.getId()).orElse(changedLanguage);
+
+        createTextCodeArea(changedLanguage.getKeyWords(),textCodeAreaText);
     }
 
 
     @FXML
     void handleBtnCancel() {
-        System.out.println(textCodeArea.getText());
         closeStage();
     }
 
@@ -155,7 +156,6 @@ public class ControllerSnippetDetails {
         choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
         labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
         textFieldDescription.setText(codeSnippet.getDescription());
-        System.out.println(Arrays.toString(keywords));
         createTextCodeArea(keywords, codeSnippet.getSnippet());
 
         svgIsFavorite.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
@@ -186,7 +186,6 @@ public class ControllerSnippetDetails {
 
     @FXML
     private void handleBtnSave() throws SQLException {
-        System.out.println("click save btn" + codeSnippetId);
         createCodeSnippetFromFormData();
         if (codeSnippetId == 0) {
             codeSnippetRepositoryJDBC.insert(codeSnippet);
@@ -210,7 +209,6 @@ public class ControllerSnippetDetails {
 
     public void handleSVGMouseClick() {
         codeSnippet.setFavourite(!codeSnippet.isFavourite());
-        System.out.println(codeSnippet.isFavourite());
         svgIsFavorite.opacityProperty().setValue(codeSnippet.isFavourite() ? 1 : 0);
     }
 
@@ -227,7 +225,6 @@ public class ControllerSnippetDetails {
 
     public void choiceBoxLanguageChanged(ActionEvent actionEvent) {
         if(textCodeArea == null) return;
-        System.out.println(choiceBoxLanguage.getSelectionModel().getSelectedItem());
         Language selectedLanguage = choiceBoxLanguage.getSelectionModel().getSelectedItem();
         String text = textCodeArea.getText();
         String[] keywords = selectedLanguage == null ? Constants.STANDARD_KEY_WORDS : selectedLanguage.getKeyWords();
