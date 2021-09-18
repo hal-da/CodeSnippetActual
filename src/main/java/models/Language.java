@@ -19,13 +19,13 @@ public class Language {
 
     public Language(String name, String keyWords) {
         this.name = name;
-        this.keyWords = keyWords.split(",");
+        this.keyWords = Arrays.stream(keyWords.split(",")).map(String::trim).toArray(String[]::new);
     }
 
-    public Language(int id, String name, String[] keyWords) {
+    public Language(int id, String name, String keyWords) {
         this.id = id;
         this.name = name;
-        this.keyWords = keyWords;
+        this.keyWords = Arrays.stream(keyWords.split(",")).map(String::trim).toArray(String[]::new);
     }
 
     public Language(String name) {

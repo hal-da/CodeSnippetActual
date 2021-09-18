@@ -49,10 +49,6 @@ public class DataBaseSetup {
             try {
                 statement.execute(CREATE_TABLE_LANGUAGE);
                 System.out.println("table lang created");
-            } catch (SQLException sqlException) {
-                System.out.println(sqlException);
-            }
-            try {
                 statement.execute(CREATE_TABLE_SNIPPETS);
                 System.out.println("table snippets created");
                 createAndInsertLanguageJavaAndFirstCodeSnippetIntoDB();

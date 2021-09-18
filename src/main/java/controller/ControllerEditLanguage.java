@@ -85,24 +85,16 @@ public class ControllerEditLanguage {
     void handleBtnSave(ActionEvent event) throws SQLException {
         int choiceBoxSelectedIndex = choiceBoxLanguages.getSelectionModel().getSelectedIndex();
         if(choiceBoxSelectedIndex == 0){
+
             languageRepositoryJDBC.insert(new Language(textFieldLanguage.getText(), textAreaKeyWords.getText()));
         } else {
-            int languageId = choiceBoxLanguages.getSelectionModel().getSelectedItem().getId();
-            String languageName = textFieldLanguage.getText();
-            String[] keyWords = textAreaKeyWords.getText().split(",");
-            keyWords = Arrays.stream(keyWords).map(String::trim).toArray(String[]::new);
-            languageRepositoryJDBC.update(new Language(languageId,languageName, keyWords));
+            languageRepositoryJDBC.update(new Language(choiceBoxLanguages.getSelectionModel().getSelectedItem().getId(),textFieldLanguage.getText(), textAreaKeyWords.getText()));
         }
-
-
-
         closeStage();
     }
 
     private void closeStage(){
         Stage stage = (Stage) btnCancel.getScene().getWindow();
-        Parent parent = btnCancel.getParent();
-        //parent.
         stage.close();
     }
 

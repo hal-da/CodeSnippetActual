@@ -40,7 +40,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         while (resultSet.next()){
             int languageId = resultSet.getInt(1);
             String languageName = resultSet.getString(2);
-            String[] keyWords = resultSet.getString(3).split(",");
+            String keyWords = resultSet.getString(3);
             Language language = new Language(languageId,languageName, keyWords);
             System.out.println(language.getName() + " language loaded from table - languagerepo");
             languages.add(language);
@@ -58,7 +58,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         while (resultSet.next()){
             int langId = resultSet.getInt(1);
             String langName = resultSet.getString(2);
-            String[] keyWords = resultSet.getString(3).split(",");
+            String keyWords = resultSet.getString(3);
             language = new Language(langId,langName,keyWords);
         }
         return Optional.ofNullable(language);

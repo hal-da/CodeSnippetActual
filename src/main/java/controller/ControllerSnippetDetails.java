@@ -18,6 +18,7 @@ import view.TextCodeArea;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
@@ -79,7 +80,7 @@ public class ControllerSnippetDetails {
 
     @FXML
     void handlerBtnEditLanguage() throws SQLException {
-
+        System.out.println(" HANDLER BTN EDIT FIRED ");
 
         int languageId = choiceBoxLanguage.getSelectionModel().getSelectedItem() == null ? 0 : choiceBoxLanguage.getSelectionModel().getSelectedItem().getId();
         Language changedLanguage = languageRepositoryJDBC.read(languageId).orElse(choiceBoxLanguage.getSelectionModel().getSelectedItem());
@@ -94,6 +95,7 @@ public class ControllerSnippetDetails {
 
         String textCodeAreaText = textCodeArea.getText();
         changedLanguage = languageRepositoryJDBC.read(changedLanguage.getId()).orElse(changedLanguage);
+        //String[] keyWords = changedLanguage == null ? Constants.STANDARD_KEY_WORDS : changedLanguage.getKeyWords();
 
         createTextCodeArea(changedLanguage.getKeyWords(),textCodeAreaText);
     }
@@ -123,6 +125,9 @@ public class ControllerSnippetDetails {
 
         labelDate.setText(String.valueOf(LocalDate.now()));
         languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
+        choiceBoxLanguage.getSelectionModel().select(languages.get(0));
+        System.out.println(" FIRST LANG SELECTED ");
+
         fillLanguageList();
 
         disableButtonsAtStart(btnSave);
@@ -138,6 +143,7 @@ public class ControllerSnippetDetails {
         //raise timesSeen in CodeSnippet & save it
         if(codeSnippetId != 0){
             codeSnippet.setTimesSeen(codeSnippet.getTimesSeen()+1);
+            choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
             try {
                 codeSnippetRepositoryJDBC.update(codeSnippet);
             } catch (SQLException sqlException) {
@@ -153,7 +159,7 @@ public class ControllerSnippetDetails {
         String[] keywords = codeSnippet.getLanguage() == null ?  Constants.STANDARD_KEY_WORDS : codeSnippet.getLanguage().getKeyWords();
 
         textFieldTitle.setText(codeSnippet.getTitle());
-        choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
+        //if(codeSnippet != null)choiceBoxLanguage.getSelectionModel().select(codeSnippet.getLanguage());
         labelDate.setText(String.valueOf(codeSnippet.getLastChange()));
         textFieldDescription.setText(codeSnippet.getDescription());
         createTextCodeArea(keywords, codeSnippet.getSnippet());
