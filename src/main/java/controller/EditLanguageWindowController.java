@@ -9,7 +9,7 @@ import models.Language;
 
 import java.io.IOException;
 
-public class EditLanguageWindow {
+public class EditLanguageWindowController {
 
     private Stage stage;
 
@@ -20,7 +20,7 @@ public class EditLanguageWindow {
         fxmlLoader.setLocation(getClass().getResource("/fxml/editLanguage.fxml"));
         try {
             Parent parent = fxmlLoader.load();
-            ControllerEditLanguage controllerEditLanguage = fxmlLoader.getController();
+            EditLanguageController controllerEditLanguage = fxmlLoader.getController();
             controllerEditLanguage.setSelectedLanguage(selectedLanguage);
             Scene scene = new Scene(parent);
             stage = new Stage();

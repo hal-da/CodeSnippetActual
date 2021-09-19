@@ -8,7 +8,7 @@ import models.CodeSnippet;
 import java.io.IOException;
 import java.util.Objects;
 
-public class CodeSnippetDetailWindow {
+public class CodeSnippetDetailWindowController {
     private CodeSnippet codeSnippet;
 
     void showSnippetInStage(CodeSnippet codeSnippet){
@@ -19,9 +19,9 @@ public class CodeSnippetDetailWindow {
         fxmlLoader.setLocation(getClass().getResource("/fxml/snippetDetail.fxml"));
         try {
             Parent root = fxmlLoader.load();
-            ControllerSnippetDetails controllerSnippetDetails = fxmlLoader.getController();
-            controllerSnippetDetails.setCodeSnippet(codeSnippet);
-            controllerSnippetDetails.populateViewWithExistingCodeSnippet();
+            SnippetDetailsController snippetDetailsController = fxmlLoader.getController();
+            snippetDetailsController.setCodeSnippet(codeSnippet);
+            snippetDetailsController.populateViewWithExistingCodeSnippet();
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/java-keywords.css")).toExternalForm());
