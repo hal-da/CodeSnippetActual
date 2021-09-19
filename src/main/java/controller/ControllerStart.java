@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import models.CodeSnippet;
 import models.Language;
 import repository.CodeSnippetRepositoryJDBC;
@@ -24,20 +23,16 @@ public class ControllerStart {
     private CheckBox checkBoxSearchDescription;
     @FXML
     private TextField textFieldSearchBar;
-
     @FXML
     private ChoiceBox<Language> choiceBoxLanguages;
-
     @FXML
     private ChoiceBox<String> choiceBoxSortBy;
-
     @FXML
     private ListView<CodeSnippet> listViewSnippets;
-
     @FXML
     private Button buttonNewSnippet;
 
-    private final String[] sortOptionsArr = new String[] {"Last change", "Language", "Title", "Times seen", "Description", "created at"};
+    private final String[] sortOptionsArr = new String[] {"Last change", "Language", "Title", "Times seen", "Description", "created at", "favourites"};
     private final ObservableList<String> sortOptions = FXCollections.observableArrayList(sortOptionsArr);
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
     private final CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
@@ -49,9 +44,30 @@ public class ControllerStart {
     }
 
     @FXML
-    public void handleInputSort(){
-        System.out.println(choiceBoxSortBy.getValue());
+    void initialize() throws SQLException {
+        System.out.println("init");
+        assert textFieldSearchBar != null : "fx:id=\"textFieldSearchBar\" was not injected: check your FXML file 'start.fxml'.";
+        assert choiceBoxLanguages != null : "fx:id=\"choiceBoxLanguage\" was not injected: check your FXML file 'start.fxml'.";
+        assert choiceBoxSortBy != null : "fx:id=\"choiceBoxSortBy\" was not injected: check your FXML file 'start.fxml'.";
+        assert listViewSnippets != null : "fx:id=\"listSnippets\" was not injected: check your FXML file 'start.fxml'.";
+        assert buttonNewSnippet != null : "fx:id=\"buttonNewSnippet\" was not injected: check your FXML file 'start.fxml'.";
 
+        checkBoxSearchDescription.setSelected(true);
+        checkBoxSearchCode.setSelected(true);
+        checkBoxSearchTitle.setSelected(true);
+
+        listViewSnippets.setCellFactory(cell -> new CustomListCell());
+        listViewSnippets.setOnMouseClicked(click -> openSnippetDetail(listViewSnippets.getSelectionModel().getSelectedItem()));
+
+        fillChoiceBox();
+        fillSortBox();
+        codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
+        fillListView(codeSnippetObservableList);
+        codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange).reversed());
+    }
+
+    @FXML
+    public void handleInputSort(){
         switch (choiceBoxSortBy.getValue()) {
             case "Last change" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange).reversed());
             case "Language" -> codeSnippetObservableList.sort(Comparator.comparing(x -> x.getLanguage().getName()));
@@ -59,6 +75,7 @@ public class ControllerStart {
             case "Times seen" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getTimesSeen).reversed());
             case "Description" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getDescription));
             case "created at" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange));
+            case "favourites" -> codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::isFavourite).reversed());
             default -> System.out.println("default");
         }
     }
@@ -109,6 +126,8 @@ public class ControllerStart {
         openSnippetDetail(new CodeSnippet());
     }
 
+
+
     private void openSnippetDetail(CodeSnippet codeSnippet){
 
         if(codeSnippet == null) return;
@@ -123,29 +142,6 @@ public class ControllerStart {
         }
 
         listViewSnippets.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    void initialize() throws SQLException {
-        System.out.println("init");
-        assert textFieldSearchBar != null : "fx:id=\"textFieldSearchBar\" was not injected: check your FXML file 'start.fxml'.";
-        assert choiceBoxLanguages != null : "fx:id=\"choiceBoxLanguage\" was not injected: check your FXML file 'start.fxml'.";
-        assert choiceBoxSortBy != null : "fx:id=\"choiceBoxSortBy\" was not injected: check your FXML file 'start.fxml'.";
-        assert listViewSnippets != null : "fx:id=\"listSnippets\" was not injected: check your FXML file 'start.fxml'.";
-        assert buttonNewSnippet != null : "fx:id=\"buttonNewSnippet\" was not injected: check your FXML file 'start.fxml'.";
-
-        checkBoxSearchDescription.setSelected(true);
-        checkBoxSearchCode.setSelected(true);
-        checkBoxSearchTitle.setSelected(true);
-
-        listViewSnippets.setCellFactory(cell -> new CustomListCell());
-        listViewSnippets.setOnMouseClicked(click -> openSnippetDetail(listViewSnippets.getSelectionModel().getSelectedItem()));
-
-        fillChoiceBox();
-        fillSortBox();
-        codeSnippetObservableList = FXCollections.observableArrayList(codeSnippetRepositoryJDBC.readAll());
-        fillListView(codeSnippetObservableList);
-        codeSnippetObservableList.sort(Comparator.comparing(CodeSnippet::getLastChange).reversed());
     }
 
     private void fillListView(ObservableList<CodeSnippet> codeSnippetObservableList){
@@ -171,7 +167,6 @@ public class ControllerStart {
 
     @FXML
     private void filterSnippetListByLanguage() {
-        System.out.println("filter lang");
         if(!choiceBoxLanguages.getSelectionModel().isSelected(0)){
             ObservableList<CodeSnippet> languageFilteredList  = codeSnippetObservableList
                     .stream()

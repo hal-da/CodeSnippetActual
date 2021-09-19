@@ -4,11 +4,10 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 
 public class LanguageTest extends TestCase {
-    private final String testName = "Suaheli";
-    private final Language language = new Language();
+    private final String testName = "Java";
+    private final Language language = new Language(testName);
 
     public void testTestGetName() {
-        language.setName(testName);
         Assert.assertEquals(testName, language.getName());
     }
 }

@@ -1,19 +1,10 @@
 package controller;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.CodeSnippet;
@@ -23,42 +14,50 @@ import repository.LanguageRepositoryJDBC;
 
 public class ControllerEditLanguage {
 
+    private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
 
     @FXML
     private ChoiceBox<Language> choiceBoxLanguages;
-
     @FXML
     private TextField textFieldLanguage;
-
     @FXML
     private Button btnDelete;
-
     @FXML
     private Button btnCancel;
-
     @FXML
     private Button btnSave;
-
     @FXML
     private TextArea textAreaKeyWords;
 
-    private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
+    public ControllerEditLanguage() throws SQLException {}
 
+    @FXML
+    void initialize() throws SQLException {
+        assert choiceBoxLanguages != null : "fx:id=\"choiceBoxLanguages\" was not injected: check your FXML file 'editLanguage.fxml'.";
+        assert textFieldLanguage != null : "fx:id=\"textFieldLanguage\" was not injected: check your FXML file 'editLanguage.fxml'.";
+        assert btnDelete != null : "fx:id=\"btnDelete\" was not injected: check your FXML file 'editLanguage.fxml'.";
+        assert btnCancel != null : "fx:id=\"btnCancel\" was not injected: check your FXML file 'editLanguage.fxml'.";
+        assert btnSave != null : "fx:id=\"btnSave\" was not injected: check your FXML file 'editLanguage.fxml'.";
+        assert textAreaKeyWords != null : "fx:id=\"textAreaKeyWords\" was not injected: check your FXML file 'editLanguage.fxml'.";
 
-    public ControllerEditLanguage() throws SQLException {
+        fillChoiceBox();
+        disableBtnSaveAtStart();
+        disableDeleteBtn();
 
-
+        choiceBoxLanguages.getSelectionModel().selectedItemProperty().addListener(
+                (observableValue, oldLanguage, newLanguage) -> {
+                    textFieldLanguage.setText(newLanguage.getName());
+                    textAreaKeyWords.setText(String.join(", ",newLanguage.getKeyWords()));
+                });
     }
 
     @FXML
-    void handleBtnCancel(ActionEvent event) {
+    void handleBtnCancel() {
         closeStage();
     }
 
-
-
     @FXML
-    void handleBtnDelete(ActionEvent event) throws SQLException {
+    void handleBtnDelete() throws SQLException {
         int choiceBoxSelectedIndex = choiceBoxLanguages.getSelectionModel().getSelectedIndex();
 
         if(choiceBoxSelectedIndex != 0){
@@ -98,7 +97,7 @@ public class ControllerEditLanguage {
     }
 
     @FXML
-    void handleBtnSave(ActionEvent event) throws SQLException {
+    void handleBtnSave() throws SQLException {
         int choiceBoxSelectedIndex = choiceBoxLanguages.getSelectionModel().getSelectedIndex();
         if(choiceBoxSelectedIndex == 0){
 
@@ -114,26 +113,6 @@ public class ControllerEditLanguage {
         stage.close();
     }
 
-    @FXML
-    void initialize() throws SQLException {
-        assert choiceBoxLanguages != null : "fx:id=\"choiceBoxLanguages\" was not injected: check your FXML file 'editLanguage.fxml'.";
-        assert textFieldLanguage != null : "fx:id=\"textFieldLanguage\" was not injected: check your FXML file 'editLanguage.fxml'.";
-        assert btnDelete != null : "fx:id=\"btnDelete\" was not injected: check your FXML file 'editLanguage.fxml'.";
-        assert btnCancel != null : "fx:id=\"btnCancel\" was not injected: check your FXML file 'editLanguage.fxml'.";
-        assert btnSave != null : "fx:id=\"btnSave\" was not injected: check your FXML file 'editLanguage.fxml'.";
-        assert textAreaKeyWords != null : "fx:id=\"textAreaKeyWords\" was not injected: check your FXML file 'editLanguage.fxml'.";
-
-        fillChoiceBox();
-        disableBtnSaveAtStart();
-        disableDeleteBtn();
-
-        choiceBoxLanguages.getSelectionModel().selectedItemProperty().addListener(
-                (observableValue, oldLanguage, newLanguage) -> {
-                    textFieldLanguage.setText(newLanguage.getName());
-                    textAreaKeyWords.setText(String.join(", ",newLanguage.getKeyWords()));
-                });
-    }
-
     private void disableBtnSaveAtStart(){
         btnSave.setDisable(true);
         textFieldLanguage.textProperty().addListener( (observable, o, n) -> {
@@ -143,7 +122,6 @@ public class ControllerEditLanguage {
     }
 
     private void disableDeleteBtn(){
-
         btnDelete.setDisable(true);
         choiceBoxLanguages.getSelectionModel().selectedItemProperty().addListener(o -> {
             btnDelete.setDisable(false);
@@ -167,6 +145,5 @@ public class ControllerEditLanguage {
 
     public void setSelectedLanguage(Language selectedLanguage) {
         if(selectedLanguage != null) setFormToSelectedLang(selectedLanguage);
-        System.out.println(selectedLanguage +  " selected lang");
     }
 }

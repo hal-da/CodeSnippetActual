@@ -29,7 +29,7 @@ public class DataBaseSetup {
             "FOREIGN KEY (language_id) REFERENCES languages(language_id)" +
             ")";
 
-    public static void createDatabase() throws SQLException {
+    public static void createDatabase() {
         System.out.println("db setup started");
         System.out.println("getting connection");
         Connection connection;
@@ -44,8 +44,8 @@ public class DataBaseSetup {
         }
 
         if (statement != null) {
-            statement.execute("DROP table snippets");
-            statement.execute("DROP table languages");
+//            statement.execute("DROP table snippets");
+//            statement.execute("DROP table languages");
             try {
                 statement.execute(CREATE_TABLE_LANGUAGE);
                 System.out.println("table lang created");
@@ -93,10 +93,6 @@ public class DataBaseSetup {
                 }""");
 
         codeSnippetRepositoryJDBC.insert(codeSnippet);
-
-
         System.out.println("inserted test snippet");
-
-
     }
 }

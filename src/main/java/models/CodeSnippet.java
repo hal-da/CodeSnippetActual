@@ -90,10 +90,6 @@ public class CodeSnippet {
         return url;
     }
 
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
     public LocalDate getLastChange() {
         return lastChange;
     }

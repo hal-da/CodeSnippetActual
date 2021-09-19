@@ -8,7 +8,6 @@ import java.util.List;
 public interface CodeSnippetRepository {
     void insert(CodeSnippet codeSnippet) throws SQLException;
     List<CodeSnippet> readAll() throws SQLException;
-    //Optional<CodeSnippet> read(int codeSnippetId) throws SQLException;
     void update(CodeSnippet codeSnippet) throws SQLException;
     void delete(CodeSnippet codeSnippet) throws SQLException;
 }

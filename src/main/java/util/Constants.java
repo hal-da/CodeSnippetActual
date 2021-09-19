@@ -7,7 +7,7 @@ public class Constants {
     public static final String TABLE_NAME_SNIPPETS = "snippets";
     public static final String[] STANDARD_KEY_WORDS = new String[] {
             "abstract", "assert", "boolean", "break", "byte", "requires","Override",
-            "case", "catch", "char", "class", "const","@",
+            "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else",
             "enum", "extends", "final", "finally", "float",
             "for", "goto", "if", "implements", "import",

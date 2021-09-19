@@ -7,10 +7,9 @@ public class CodeSnippetTest extends TestCase {
 
     CodeSnippet codeSnippet = new CodeSnippet();
     private final int testId = 420;
-
+    codeSnippet.setId(testId);
 
     public void testGetId() {
-        codeSnippet.setId(testId);
         Assert.assertEquals(testId, codeSnippet.getId());
     }
 }

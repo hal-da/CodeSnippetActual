@@ -2,10 +2,8 @@ package repository;
 
 import models.Language;
 import util.Constants;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +21,6 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, language.getName());
         String keyWords = language.getKeyWords().length == 0 ? String.join(",",Constants.STANDARD_KEY_WORDS) : String.join(",",language.getKeyWords());
-        System.out.println("last words: " + keyWords);
         preparedStatement.setString(2,keyWords);
         preparedStatement.executeUpdate();
         ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -42,7 +39,6 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
             String languageName = resultSet.getString(2);
             String keyWords = resultSet.getString(3);
             Language language = new Language(languageId,languageName, keyWords);
-            System.out.println(language.getName() + " language loaded from table - languagerepo");
             languages.add(language);
         }
 

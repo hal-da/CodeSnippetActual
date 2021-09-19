@@ -20,7 +20,6 @@ public class Main extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/listView.css")).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
     public static void main(String[] args) {
         launch(args);

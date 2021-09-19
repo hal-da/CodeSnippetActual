@@ -3,11 +3,7 @@ package repository;
 import models.CodeSnippet;
 import models.Language;
 import util.Constants;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +59,6 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
     @Override
     public void update(CodeSnippet codeSnippet) throws SQLException {
         PreparedStatement prepStatement = connection.prepareStatement("UPDATE " + snippetsDatabaseName + " SET title=?,description=?,favourite=?,snippet=?,language_id=?,url=?,last_change=?,times_seen=?, created_at=? WHERE snippet_id = ?");
-        System.out.println("bis hierhin ging alles gut");
         prepStatement.setString(1,codeSnippet.getTitle());
         prepStatement.setString(2,codeSnippet.getDescription());
         prepStatement.setBoolean(3, codeSnippet.isFavourite());

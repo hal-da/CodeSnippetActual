@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="780.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerSnippetDetails">
-   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0"
-         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane prefHeight="780.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerSnippetDetails">
+   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <TextField fx:id="textFieldTitle" alignment="CENTER" text="Title">
          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextField>
       <HBox alignment="CENTER" spacing="10.0">
          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
-         <Label text="times seen: "/>
-         <Label fx:id="labelTimesSeen" text="0"/>
-         <Separator orientation="VERTICAL"/>
-         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Last time modified:" textAlignment="RIGHT"/>
+         <Label text="times seen: " />
+         <Label fx:id="labelTimesSeen" text="0" />
+         <Separator orientation="VERTICAL" />
+         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Last time modified:" textAlignment="RIGHT" />
          <Label fx:id="labelDate" text="date">
             <HBox.margin>
-               <Insets/>
+               <Insets />
             </HBox.margin>
          </Label>
-         <Separator orientation="VERTICAL"/>
-         <Label text="Language"/>
-         <ChoiceBox fx:id="choiceBoxLanguage" onAction="#choiceBoxLanguageChanged" prefWidth="150.0"/>
-         <Separator orientation="VERTICAL"/>
-         <Button fx:id="btnEditLanguage" mnemonicParsing="false" onAction="#handlerBtnEditLanguage"
-                 text="Edit Languages"/>
-         <Separator orientation="VERTICAL"/>
+         <Separator orientation="VERTICAL" />
+         <Label text="Language" />
+         <ChoiceBox fx:id="choiceBoxLanguage" onAction="#choiceBoxLanguageChanged" prefWidth="150.0" />
+         <Separator orientation="VERTICAL" />
+         <Button fx:id="btnEditLanguage" mnemonicParsing="false" onAction="#handlerBtnEditLanguage" text="Edit Languages" />
+         <Separator orientation="VERTICAL" />
          <AnchorPane onMousePressed="#handleSVGMouseClick">
             <cursor>
-               <Cursor fx:constant="HAND"/>
+               <Cursor fx:constant="HAND" />
             </cursor>
-            <SVGPath fx:id="svgIsFavorite"
-                     content="M20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7zM20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7z"
-                     fill="#f8d64e" opacity="0.0"/>
-            <SVGPath
-                    content="M20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7zm-10 6.9l-3.76 2.27 1-4.28L3.5 8.5h4.61L10 4.6l1.9 3.9h4.6l-3.73 3.4 1 4.28z"
-                    fill="#aeaeae"/>
+            <SVGPath fx:id="svgIsFavorite" content="M20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7zM20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7z" fill="#f8d64e" opacity="0.0" />
+            <SVGPath content="M20 7h-7L10 .5 7 7H0l5.46 5.47-1.64 7 6.18-3.7 6.18 3.73-1.63-7zm-10 6.9l-3.76 2.27 1-4.28L3.5 8.5h4.61L10 4.6l1.9 3.9h4.6l-3.73 3.4 1 4.28z" fill="#aeaeae" />
          </AnchorPane>
       </HBox>
       <AnchorPane fx:id="anchorPane" prefHeight="600.0">
          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </AnchorPane>
       <TextArea fx:id="textFieldDescription" text="description">
          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextArea>
       <HBox alignment="CENTER" spacing="40.0">
          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
-         <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleBtnDelete" text="Delete"/>
-         <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleBtnCancel" text="Cancel"/>
-         <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleBtnSave" text="Save"/>
+         <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleBtnDelete" text="Delete" />
+         <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleBtnCancel" text="Cancel" />
+         <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleBtnSave" text="Save" />
       </HBox>
    </VBox>
 </AnchorPane>
