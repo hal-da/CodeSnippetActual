@@ -27,7 +27,6 @@ public class EditLanguageWindow {
             stage.setTitle("Edit Languages");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
-            //stage.showAndWait();
 
         }catch (IOException e){
             e.printStackTrace();

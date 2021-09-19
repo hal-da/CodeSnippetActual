@@ -29,18 +29,16 @@
          </padding>
       </HBox>
       <HBox prefWidth="1000.0">
-         <children>
-            <Label fx:id="labelDescription" prefWidth="870.0" text="description">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
-               </padding>
-            </Label>
-            <Label fx:id="labelCreatedAt" alignment="TOP_RIGHT" text="created at:">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
-               </padding>
-            </Label>
-         </children>
+         <Label fx:id="labelDescription" prefWidth="870.0" text="description">
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+            </padding>
+         </Label>
+         <Label fx:id="labelCreatedAt" alignment="TOP_RIGHT" text="created at:">
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+            </padding>
+         </Label>
       </HBox>
    </VBox>
    <cursor>
