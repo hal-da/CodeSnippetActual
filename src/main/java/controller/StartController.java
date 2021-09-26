@@ -11,6 +11,7 @@ import models.CodeSnippet;
 import models.Language;
 import repository.CodeSnippetRepositoryJDBC;
 import repository.LanguageRepositoryJDBC;
+import util.Constants;
 
 public class StartController {
 
@@ -32,7 +33,7 @@ public class StartController {
     @FXML
     private Button buttonNewSnippet;
 
-    private final String[] sortOptionsArr = new String[] {"Last change", "Language", "Title", "Times seen", "Description", "created at", "favourites"};
+    private final String[] sortOptionsArr = Constants.sortOptionsArr;
     private final ObservableList<String> sortOptions = FXCollections.observableArrayList(sortOptionsArr);
     private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
     private final CodeSnippetRepositoryJDBC codeSnippetRepositoryJDBC = new CodeSnippetRepositoryJDBC();
@@ -82,10 +83,8 @@ public class StartController {
 
     @FXML
     void handleInputTextChangedSearch() {
-        System.out.println("handle input search");
-
         String searchTerm = textFieldSearchBar.getText().trim().toLowerCase();
-        if(searchTerm.equals("search...") || searchTerm.equals("")) {
+        if(searchTerm.equals(Constants.searchBarStandardText) || searchTerm.equals("")) {
             filterSnippetListByLanguage();
             return;
         }
@@ -161,7 +160,7 @@ public class StartController {
     }
 
     public void handleMousePressedSearchBar() {
-        textFieldSearchBar.setText("");
+        if(textFieldSearchBar.getText().equals(Constants.searchBarStandardText))textFieldSearchBar.setText("");
         handleInputTextChangedSearch();
     }
 

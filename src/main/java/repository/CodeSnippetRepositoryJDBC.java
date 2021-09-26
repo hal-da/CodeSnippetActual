@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
-    Connection connection;
-    LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
-    String snippetsDatabaseName = Constants.TABLE_NAME_SNIPPETS;
-    String languagesDatabaseName = Constants.TABLE_NAME_LANGUAGES;
+    private final Connection connection;
+    private final LanguageRepositoryJDBC languageRepositoryJDBC = new LanguageRepositoryJDBC();
+    private final String snippetsDatabaseName = Constants.TABLE_NAME_SNIPPETS;
 
     public CodeSnippetRepositoryJDBC() throws SQLException {
         connection = DriverManager.getConnection(Constants.CONNECTION_STRING);
@@ -84,7 +83,7 @@ public class CodeSnippetRepositoryJDBC implements CodeSnippetRepository{
     }
 
     private int getFKLang(CodeSnippet codeSnippet) throws SQLException {
-        String getLanguageIdQuery = "SELECT language_id FROM " + languagesDatabaseName + " WHERE language_name = ?";
+        String getLanguageIdQuery = "SELECT language_id FROM " + Constants.TABLE_NAME_LANGUAGES + " WHERE language_name = ?";
         PreparedStatement getLangIdPrepStatement = connection.prepareStatement(getLanguageIdQuery);
         getLangIdPrepStatement.setString(1,codeSnippet.getLanguage().getName());
         ResultSet r = getLangIdPrepStatement.executeQuery();

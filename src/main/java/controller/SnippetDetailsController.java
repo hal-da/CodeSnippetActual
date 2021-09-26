@@ -146,7 +146,7 @@ public class SnippetDetailsController {
     }
 
     private void createTextCodeArea(String[] keywords, String snippet) {
-        TextCodeArea.KEYWORDS = keywords;
+        TextCodeArea.keyWords = keywords;
         TextCodeArea.setKeywordPattern();
         textCodeArea = new TextCodeArea(anchorPane,snippet, keywords);
     }
@@ -155,9 +155,9 @@ public class SnippetDetailsController {
     private void handleBtnDelete() throws SQLException {
         if(codeSnippetId!=0){
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setContentText("That Snippet will be lost, like tears in rain. \nAre you sure?");
+            dialog.setContentText(Constants.confirmationDeleteSnippet);
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK,ButtonType.CANCEL);
-            dialog.setTitle("Delete CodeSnippet");
+            dialog.setTitle(Constants.deleteTitle);
             Optional<ButtonType> result = dialog.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK) {
                 codeSnippetRepositoryJDBC.delete(codeSnippet);

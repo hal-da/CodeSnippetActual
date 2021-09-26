@@ -5,6 +5,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.CodeSnippet;
+import util.Constants;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -16,7 +18,7 @@ public class CodeSnippetDetailWindowController {
         if(codeSnippet == null) return;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/fxml/snippetDetail.fxml"));
+        fxmlLoader.setLocation(getClass().getResource(Constants.snippetDetailFXML));
         try {
             Parent root = fxmlLoader.load();
             SnippetDetailsController snippetDetailsController = fxmlLoader.getController();
@@ -24,9 +26,9 @@ public class CodeSnippetDetailWindowController {
             snippetDetailsController.populateViewWithExistingCodeSnippet();
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/java-keywords.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(Constants.javaKeywordsCSS)).toExternalForm());
             Stage stage = new Stage();
-            stage.setTitle("Create new CodeSnippet");
+            stage.setTitle(Constants.createSnippetTitle);
             stage.setScene(scene);
             stage.showAndWait();
         } catch (IOException e) {

@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public class Language {
 
-    int id;
-    String name;
-    String[] keyWords = Constants.STANDARD_KEY_WORDS;
+    private int id;
+    private String name;
+    private String[] keyWords = Constants.STANDARD_KEY_WORDS;
 
 
     public Language(int id, String name) {

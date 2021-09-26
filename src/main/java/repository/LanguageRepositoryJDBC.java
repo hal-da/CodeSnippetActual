@@ -11,7 +11,7 @@ public class LanguageRepositoryJDBC implements LanguageRepository{
 
     private static final String INSERT_LANGUAGE = String.format("INSERT INTO %s (language_name, key_words) VALUES (?,?)", Constants.TABLE_NAME_LANGUAGES);
 
-    Connection connection;
+    private final Connection connection;
     public LanguageRepositoryJDBC() throws SQLException {
         connection = DriverManager.getConnection(Constants.CONNECTION_STRING);
     }

@@ -29,7 +29,7 @@ public class DataBaseSetup {
             "FOREIGN KEY (language_id) REFERENCES languages(language_id)" +
             ")";
 
-    public static void createDatabase() {
+    public static void createDatabase() throws SQLException {
         System.out.println("db setup started");
         System.out.println("getting connection");
         Connection connection;

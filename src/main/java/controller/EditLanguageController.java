@@ -11,6 +11,7 @@ import models.CodeSnippet;
 import models.Language;
 import repository.CodeSnippetRepositoryJDBC;
 import repository.LanguageRepositoryJDBC;
+import util.Constants;
 
 public class EditLanguageController {
 
@@ -77,14 +78,14 @@ public class EditLanguageController {
 
     private void deleteSnippetsBeforeLanguageShowDialog(){
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setContentText("There are snippets associated with this language. \n Please delete or change these snippets first");
+        dialog.setContentText(Constants.errorMessageDeleteLangWithAssociatedSnippet);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
         dialog.showAndWait();
     }
 
     private void readyToDeleteShowDialog() throws SQLException {
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setContentText("Are you really really sure?");
+        dialog.setContentText(Constants.confirmation);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK,ButtonType.CANCEL);
         Optional<ButtonType> result = dialog.showAndWait();
 
@@ -117,7 +118,7 @@ public class EditLanguageController {
         btnSave.setDisable(true);
         textFieldLanguage.textProperty().addListener( (observable, o, n) -> {
             btnSave.setDisable(false);
-            if(n.equals("new language")) btnSave.setDisable(true);
+            if(n.equals(Constants.newLanguageName)) btnSave.setDisable(true);
         });
     }
 
@@ -131,7 +132,7 @@ public class EditLanguageController {
 
     private void fillChoiceBox() throws SQLException {
         ObservableList<Language> languages = FXCollections.observableArrayList(languageRepositoryJDBC.readAll());
-        Language newLanguage = new Language("new language");
+        Language newLanguage = new Language(Constants.newLanguageName);
         languages.add(0, newLanguage);
         choiceBoxLanguages.setItems(languages);
         setFormToSelectedLang(newLanguage);

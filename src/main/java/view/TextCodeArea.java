@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
 
 public class TextCodeArea {
 
-    public static String[] KEYWORDS = Constants.STANDARD_KEY_WORDS;
+    public static String[] keyWords = Constants.STANDARD_KEY_WORDS;
 
-    static String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    static String KEYWORD_PATTERN = "\\b(" + String.join("|", keyWords) + ")\\b";
     private static final String PAREN_PATTERN = "\\(|\\)";
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";
@@ -30,7 +30,7 @@ public class TextCodeArea {
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
     private static final String ASSIGNMENT_PATTERN = "\\s+\\w+?\\s+=" + "|" + "\\s+\\w+\\[.*\\]?\\s+=";
-    private static final String FUNCTION_PATTERN = "(\\s(?!((if)|(while)|(switch)|(do)|("+String.join(")|(",KEYWORDS)+")))([a-z][\\w]*))(?=(\\s*\\())";
+    private static final String FUNCTION_PATTERN = "(\\s(?!(("+String.join(")|(", keyWords)+")))([a-z][\\w]*))(?=(\\s*\\())";
     private static final String DIGIT_PATTERN = "\\d+\\.?\\d?";
     private static final String METHOD_CALL_PATTERN = "(?<=\\.)([a-z]\\w+)(?=([.(]))";
 
@@ -49,7 +49,7 @@ public class TextCodeArea {
     );
 
     public static void setKeywordPattern(){
-        KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+        KEYWORD_PATTERN = "\\b(" + String.join("|", keyWords) + ")\\b";
     }
 
     public void compilePattern(){
@@ -140,11 +140,11 @@ public class TextCodeArea {
     }
 
     public String[] getKEYWORDS() {
-        return KEYWORDS;
+        return keyWords;
     }
 
     public void setKEYWORDS(String[] KEYWORDS) {
-        this.KEYWORDS = KEYWORDS;
+        this.keyWords = KEYWORDS;
         setKeywordPattern();
     }
 }

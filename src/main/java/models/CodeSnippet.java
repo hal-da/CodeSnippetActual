@@ -6,16 +6,16 @@ import java.time.LocalDate;
 
 public class CodeSnippet {
 
-    int id = 0;
-    String title = "";
-    String description = "";
-    boolean isFavourite = false;
-    String snippet = "";
-    Language language = null;
-    URL url = null;
-    LocalDate lastChange = LocalDate.now();
-    LocalDate createdAt = LocalDate.now();
-    int timesSeen = 0;
+    private int id = 0;
+    private String title = "";
+    private String description = "";
+    private boolean isFavourite = false;
+    private String snippet = "";
+    private Language language = null;
+    private URL url = null;
+    private LocalDate lastChange = LocalDate.now();
+    private LocalDate createdAt = LocalDate.now();
+    private int timesSeen = 0;
 
     //only for unit test
     public CodeSnippet() {
